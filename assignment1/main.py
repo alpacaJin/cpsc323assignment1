@@ -1,38 +1,43 @@
 import sys
+from lexer import *
+
+separators = ['$', '(', ')', '{', '}', ';', ',']
+operators = ['==', '!=', '>', '<', '<=', '=>', '+', '-', '*', '/', '=']
+
+output = []
 
 def isOperator(char):
-    operators = ['==', '!=', '>', '<', '<=', '=>', '+', '-', '*', '/', '=']
     return char in operators
 
 def isSeparator(char):
-    separators = ['$', '(', ')', '{', '}', ';', ',']
     return char in separators
 
 def processSeparator(char, outputFile):
-    print(f"SEPARATOR: {char}")
-    outputFile.write(f"SEPARATOR: {char}\n")
+    output.append(["SEPARATOR", char])
 
 def processOperator(char, inputFile, outputFile):
     operatorStr = ""
+    operatorStrTemp = ""
     operatorStr += char
+    operatorStrTemp += char
 
+    # Handles cases of !=, ==, <=, =>
     if char == "!" or char == "=" or char == "<":
         char = inputFile.read(1)
-        if char == "=" or char == ">":
+        operatorStrTemp += char
+        
+        if operatorStrTemp in operators:
             operatorStr += char
         else:
             inputFile.seek(inputFile.tell() - 1, 0)
 
-    print(f"OPERATOR: {operatorStr}")
-    outputFile.write(f"OPERATOR: {operatorStr}\n")
+    output.append(["OPERATOR", operatorStr])
 
 def processAlpha(str, outputFile):
-    print(f"IDENTIFIER/KEYWORD: {str}")
-    outputFile.write(f"IDENTIFIER/KEYWORD: {str}\n")
+    output.append(["IDENTIFIER", str])
 
 def processDigit(str, outputFile):
-    print(f"INTEGER/REAL: {str}")
-    outputFile.write(f"INTEGER/REAL: {str}\n")
+    output.append(["INTEGER", str])
 
 
 def main():
@@ -114,6 +119,11 @@ def main():
                 else:
                     inputFile.seek(inputFile.tell() - 1)
                     continue
+
+        outputFile.write("{:<{width}}{}\n\n".format("TOKENS", "LEXEMES", width=30))
+        
+        for entry in output:
+            outputFile.write("{:<{width}}{}\n".format(entry[0], entry[1], width=30))
 
 if __name__ == "__main__":
     main()
