@@ -1,0 +1,113 @@
+SOURCE CODE:
+
+[* this is comment for this sample code which
+
+converts Fahrenheit into Celcius *]
+
+
+
+$
+
+function convertx (fahr integer)
+
+{
+
+    return 5.5 * (fahr -32) / 9;
+
+}
+
+
+
+$
+
+    integer low, high, step; [* declarations *]
+
+$
+
+    scan (low, high, step);
+
+    while (low <= high )
+
+        { 
+
+        print (low);
+
+        print (convertx (low));
+
+        low = low + step;
+
+        }
+
+    endwhile
+
+$
+
+TOKENS                        LEXEMES
+
+SEPARATOR                     $
+IDENTIFIER                    function
+IDENTIFIER                    convertx
+SEPARATOR                     (
+IDENTIFIER                    fahr
+IDENTIFIER                    integer
+SEPARATOR                     )
+SEPARATOR                     {
+IDENTIFIER                    return
+REAL                          5.5
+OPERATOR                      *
+SEPARATOR                     (
+IDENTIFIER                    fahr
+OPERATOR                      -
+INTEGER                       32
+SEPARATOR                     )
+OPERATOR                      /
+INTEGER                       9
+SEPARATOR                     ;
+SEPARATOR                     }
+SEPARATOR                     $
+IDENTIFIER                    integer
+IDENTIFIER                    low
+SEPARATOR                     ,
+IDENTIFIER                    high
+SEPARATOR                     ,
+IDENTIFIER                    step
+SEPARATOR                     ;
+SEPARATOR                     $
+IDENTIFIER                    scan
+SEPARATOR                     (
+IDENTIFIER                    low
+SEPARATOR                     ,
+IDENTIFIER                    high
+SEPARATOR                     ,
+IDENTIFIER                    step
+SEPARATOR                     )
+SEPARATOR                     ;
+IDENTIFIER                    while
+SEPARATOR                     (
+IDENTIFIER                    low
+OPERATOR                      <=
+IDENTIFIER                    high
+SEPARATOR                     )
+SEPARATOR                     {
+IDENTIFIER                    print
+SEPARATOR                     (
+IDENTIFIER                    low
+SEPARATOR                     )
+SEPARATOR                     ;
+IDENTIFIER                    print
+SEPARATOR                     (
+IDENTIFIER                    convertx
+SEPARATOR                     (
+IDENTIFIER                    low
+SEPARATOR                     )
+SEPARATOR                     )
+SEPARATOR                     ;
+IDENTIFIER                    low
+OPERATOR                      =
+IDENTIFIER                    low
+OPERATOR                      +
+IDENTIFIER                    step
+SEPARATOR                     ;
+SEPARATOR                     }
+IDENTIFIER                    endwhile
+SEPARATOR                     $
