@@ -1,39 +1,59 @@
 import sys
+from lexer import *
 
-def isOperator(char):
-    operators = ['==', '!=', '>', '<', '<=', '=>', '+', '-', '*', '/', '=']
-    return char in operators
+separators = ['$', '(', ')', '{', '}', ';', ',']
+operators = ['==', '!=', '>', '<', '<=', '=>', '+', '-', '*', '/', '=']
+
+output = []
 
 def isSeparator(char):
-    separators = ['$', '(', ')', '{', '}', ';', ',']
     return char in separators
 
-def processSeparator(char, outputFile):
-    print(f"SEPARATOR: {char}")
-    outputFile.write(f"SEPARATOR: {char}\n")
+def isOperator(char):
+    return char in operators
 
-def processOperator(char, inputFile, outputFile):
+def processSeparator(char):
+    output.append(["SEPARATOR", char])
+
+def processOperator(char, inputFile):
     operatorStr = ""
+    operatorStrTemp = ""
     operatorStr += char
+    operatorStrTemp += char
 
+    # Handles cases of !=, ==, <=, =>
     if char == "!" or char == "=" or char == "<":
         char = inputFile.read(1)
-        if char == "=" or char == ">":
+        operatorStrTemp += char
+        
+        # If the next char forms a 2 char operator that is in the operators list,
+        # update the operatorStr string 
+        if operatorStrTemp in operators:
             operatorStr += char
         else:
             inputFile.seek(inputFile.tell() - 1, 0)
 
-    print(f"OPERATOR: {operatorStr}")
-    outputFile.write(f"OPERATOR: {operatorStr}\n")
+    output.append(["OPERATOR", operatorStr])
 
-def processAlpha(str, outputFile):
-    print(f"IDENTIFIER/KEYWORD: {str}")
-    outputFile.write(f"IDENTIFIER/KEYWORD: {str}\n")
+def processAlpha(str):
+    state = identifierDFSM(str)
 
-def processDigit(str, outputFile):
-    print(f"INTEGER/REAL: {str}")
-    outputFile.write(f"INTEGER/REAL: {str}\n")
+    if state == "IDENTIFIER":
+        output.append(["IDENTIFIER", str])
+    elif state == "KEYWORD":
+        output.append(["KEYWORD", str])
+    elif state == "Invalid Token":
+        output.append(["Invalid Token", str])
 
+def processDigit(str):
+    state = int_realDFSM(str)
+
+    if state == "INTEGER":
+        output.append(["INTEGER", str])
+    elif state == "REAL":
+        output.append(["REAL", str])
+    elif state == "Invalid Token":
+        output.append(["Invalid Token", str])
 
 def main():
     inputFileName = input("Enter the input file name (or type exit to exit the program): ")
@@ -62,7 +82,7 @@ def main():
             if char == "":
                 break
 
-            # Handles comments
+            # Handles beginning of comments
             if char == "[":
                 char = inputFile.read(1)
                 if char == "*":
@@ -70,6 +90,7 @@ def main():
                 else:
                     inputFile.seek(inputFile.tell() - 1, 0)
 
+            # Handles end of comments
             if char == "*" and commentFlag:
                 char = inputFile.read(1)
                 if char == "]":
@@ -78,15 +99,16 @@ def main():
                 else:
                     inputFile.seek(inputFile.tell() - 1, 0)
             
+            # If part of a comment, skip to next iteration
             if commentFlag:
                 continue
 
             if isSeparator(char):
-                processSeparator(char, outputFile)
+                processSeparator(char)
                 continue
 
             if isOperator(char):
-                processOperator(char, inputFile, outputFile)
+                processOperator(char, inputFile)
                 continue
 
             if char.isalpha():
@@ -94,7 +116,7 @@ def main():
 
                 char = inputFile.read(1)
                 if isOperator(char) or isSeparator(char) or char.isspace():
-                    processAlpha(str, outputFile)
+                    processAlpha(str)
                     str = ""
                     inputFile.seek(inputFile.tell() - 1)
                     continue
@@ -107,13 +129,21 @@ def main():
 
                 char = inputFile.read(1)
                 if isOperator(char) or isSeparator(char) or char.isspace():
-                    processDigit(str, outputFile)
+                    processDigit(str)
                     str = ""
                     inputFile.seek(inputFile.tell() - 1)
+                    continue
+                elif char == ".":
+                    str += char
                     continue
                 else:
                     inputFile.seek(inputFile.tell() - 1)
                     continue
+
+        outputFile.write("{:<{width}}{}\n\n".format("TOKENS", "LEXEMES", width=30))
+        
+        for entry in output:
+            outputFile.write("{:<{width}}{}\n".format(entry[0], entry[1], width=30))
 
 if __name__ == "__main__":
     main()

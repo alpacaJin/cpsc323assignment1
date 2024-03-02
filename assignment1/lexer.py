@@ -132,16 +132,16 @@ def identifierDFSM(str):
     else:
         return "Invalid Token"
 
-# Test cases
-print(int_realDFSM("2738682fksfkhue234.67"))  # Output: REAL                  # Output: Invalid Token
-print(int_realDFSM("1234"))  # Output: INTEGER                                # Output: INTEGER
-print(int_realDFSM("12.34"))  # Output: REAL                                  # Output: REAL
-print(int_realDFSM("abc"))  # Output: Invalid Token                           # Output: Invalid Token
-print(int_realDFSM("123+123"))  # Output: INTEGER                             # Output: Invalid Token
+# # Test cases
+# print(int_realDFSM("2738682fksfkhue234.67"))  # Output: REAL                  # Output: Invalid Token
+# print(int_realDFSM("1234"))  # Output: INTEGER                                # Output: INTEGER
+# print(int_realDFSM("12.34"))  # Output: REAL                                  # Output: REAL
+# print(int_realDFSM("abc"))  # Output: Invalid Token                           # Output: Invalid Token
+# print(int_realDFSM("123+123"))  # Output: INTEGER                             # Output: Invalid Token
 
-print(" ")
+# print(" ")
 
-print(identifierDFSM("abc"))  # Output: IDENTIFIER
-print(identifierDFSM("a_1"))  # IDENTIFIER
-print(identifierDFSM("_abc")) # Invalid Token
-print(identifierDFSM("1abc")) # Invalid Token
+# print(identifierDFSM("abc"))  # Output: IDENTIFIER
+# print(identifierDFSM("a_1"))  # IDENTIFIER
+# print(identifierDFSM("_abc")) # Invalid Token
+# print(identifierDFSM("1abc")) # Invalid Token
