@@ -12,7 +12,7 @@ function convertx (fahr integer)
 
 {
 
-    return 5 * (fahr -32) / 9;
+    return 5.5 * (fahr -32) / 9;
 
 }
 
@@ -53,7 +53,7 @@ IDENTIFIER                    integer
 SEPARATOR                     )
 SEPARATOR                     {
 IDENTIFIER                    return
-INTEGER                       5
+REAL                          5.5
 OPERATOR                      *
 SEPARATOR                     (
 IDENTIFIER                    fahr

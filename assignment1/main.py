@@ -6,11 +6,11 @@ operators = ['==', '!=', '>', '<', '<=', '=>', '+', '-', '*', '/', '=']
 
 output = []
 
-def isOperator(char):
-    return char in operators
-
 def isSeparator(char):
     return char in separators
+
+def isOperator(char):
+    return char in operators
 
 def processSeparator(char):
     output.append(["SEPARATOR", char])
@@ -36,11 +36,24 @@ def processOperator(char, inputFile):
     output.append(["OPERATOR", operatorStr])
 
 def processAlpha(str):
-    output.append(["IDENTIFIER", str])
+    state = identifierDFSM(str)
+
+    if state == "IDENTIFIER":
+        output.append(["IDENTIFIER", str])
+    elif state == "KEYWORD":
+        output.append(["KEYWORD", str])
+    elif state == "Invalid Token":
+        output.append(["Invalid Token", str])
 
 def processDigit(str):
-    output.append(["INTEGER", str])
+    state = int_realDFSM(str)
 
+    if state == "INTEGER":
+        output.append(["INTEGER", str])
+    elif state == "REAL":
+        output.append(["REAL", str])
+    elif state == "Invalid Token":
+        output.append(["Invalid Token", str])
 
 def main():
     inputFileName = input("Enter the input file name (or type exit to exit the program): ")
@@ -91,11 +104,11 @@ def main():
                 continue
 
             if isSeparator(char):
-                processSeparator(char, outputFile)
+                processSeparator(char)
                 continue
 
             if isOperator(char):
-                processOperator(char, inputFile, outputFile)
+                processOperator(char, inputFile)
                 continue
 
             if char.isalpha():
@@ -103,7 +116,7 @@ def main():
 
                 char = inputFile.read(1)
                 if isOperator(char) or isSeparator(char) or char.isspace():
-                    processAlpha(str, outputFile)
+                    processAlpha(str)
                     str = ""
                     inputFile.seek(inputFile.tell() - 1)
                     continue
@@ -116,9 +129,12 @@ def main():
 
                 char = inputFile.read(1)
                 if isOperator(char) or isSeparator(char) or char.isspace():
-                    processDigit(str, outputFile)
+                    processDigit(str)
                     str = ""
                     inputFile.seek(inputFile.tell() - 1)
+                    continue
+                elif char == ".":
+                    str += char
                     continue
                 else:
                     inputFile.seek(inputFile.tell() - 1)
