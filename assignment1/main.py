@@ -12,10 +12,10 @@ def isOperator(char):
 def isSeparator(char):
     return char in separators
 
-def processSeparator(char, outputFile):
+def processSeparator(char):
     output.append(["SEPARATOR", char])
 
-def processOperator(char, inputFile, outputFile):
+def processOperator(char, inputFile):
     operatorStr = ""
     operatorStrTemp = ""
     operatorStr += char
@@ -26,6 +26,8 @@ def processOperator(char, inputFile, outputFile):
         char = inputFile.read(1)
         operatorStrTemp += char
         
+        # If the next char forms a 2 char operator that is in the operators list,
+        # update the operatorStr string 
         if operatorStrTemp in operators:
             operatorStr += char
         else:
@@ -33,10 +35,10 @@ def processOperator(char, inputFile, outputFile):
 
     output.append(["OPERATOR", operatorStr])
 
-def processAlpha(str, outputFile):
+def processAlpha(str):
     output.append(["IDENTIFIER", str])
 
-def processDigit(str, outputFile):
+def processDigit(str):
     output.append(["INTEGER", str])
 
 
@@ -67,7 +69,7 @@ def main():
             if char == "":
                 break
 
-            # Handles comments
+            # Handles beginning of comments
             if char == "[":
                 char = inputFile.read(1)
                 if char == "*":
@@ -75,6 +77,7 @@ def main():
                 else:
                     inputFile.seek(inputFile.tell() - 1, 0)
 
+            # Handles end of comments
             if char == "*" and commentFlag:
                 char = inputFile.read(1)
                 if char == "]":
@@ -83,6 +86,7 @@ def main():
                 else:
                     inputFile.seek(inputFile.tell() - 1, 0)
             
+            # If part of a comment, skip to next iteration
             if commentFlag:
                 continue
 
