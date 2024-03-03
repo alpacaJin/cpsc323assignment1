@@ -1,0 +1,36 @@
+$ [* This code calculates total interest over time *]
+function calcInterest (balance real, rate real, years integer)
+{
+    real interest;
+    interest = balance;
+    integer y;
+    y = 0;
+
+    while (y < years)
+    {
+        interest = interest + (interest * rate);
+        y = y + 1;
+    }
+
+    return interest - balance;
+}
+
+$ [* Variable declarations *]
+real balance, rate, maxInterest;
+integer years, threshold;
+ 
+$
+    scan(balance, rate, years);
+    print(balance);
+    print(rate);
+    pritn(years);
+    
+    maxInterest = calcInterest(balance, rate, years);
+
+    threshold = 10000.00;
+    if (maxInterest > threshold) then
+        return 0;
+    else
+        return 1;
+    endif
+$

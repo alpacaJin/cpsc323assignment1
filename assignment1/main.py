@@ -1,5 +1,5 @@
 import sys
-from lexer import *
+from lexer import int_realDFSM, identifierDFSM
 
 separators = ['$', '(', ')', '{', '}', ';', ',']
 operators = ['==', '!=', '>', '<', '<=', '=>', '+', '-', '*', '/', '=']
@@ -35,25 +35,25 @@ def processOperator(char, inputFile):
 
     output.append(["OPERATOR", operatorStr])
 
-def processAlpha(str):
+def processIdentifier(str):
     state = identifierDFSM(str)
 
     if state == "IDENTIFIER":
         output.append(["IDENTIFIER", str])
     elif state == "KEYWORD":
         output.append(["KEYWORD", str])
-    elif state == "Invalid Token":
-        output.append(["Invalid Token", str])
+    elif state == "INVALID TOKEN":
+        output.append(["INVALID TOKEN", str])
 
-def processDigit(str):
+def processIntReal(str):
     state = int_realDFSM(str)
 
     if state == "INTEGER":
         output.append(["INTEGER", str])
     elif state == "REAL":
         output.append(["REAL", str])
-    elif state == "Invalid Token":
-        output.append(["Invalid Token", str])
+    elif state == "INVALID TOKEN":
+        output.append(["INVALID TOKEN", str])
 
 def main():
     inputFileName = input("Enter the input file name (or type exit to exit the program): ")
@@ -71,6 +71,7 @@ def main():
         for line in inputFile:
             print(line)
             outputFile.write(f"{line}\n")
+        outputFile.write("\n")
 
         inputFile.seek(0)
         commentFlag = False
@@ -111,25 +112,16 @@ def main():
                 processOperator(char, inputFile)
                 continue
 
-            if char.isalpha():
+            if char.isalnum():
                 str += char
 
                 char = inputFile.read(1)
                 if isOperator(char) or isSeparator(char) or char.isspace():
-                    processAlpha(str)
-                    str = ""
-                    inputFile.seek(inputFile.tell() - 1)
-                    continue
-                else:
-                    inputFile.seek(inputFile.tell() - 1)
-                    continue
+                    if (any(c.isalpha() for c in str)):
+                        processIdentifier(str)
+                    else:
+                        processIntReal(str)
 
-            if char.isdigit():
-                str += char
-
-                char = inputFile.read(1)
-                if isOperator(char) or isSeparator(char) or char.isspace():
-                    processDigit(str)
                     str = ""
                     inputFile.seek(inputFile.tell() - 1)
                     continue
@@ -147,18 +139,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -2,6 +2,7 @@
 # Spring 2024
 # Connie Zhu, Sandra Nguyen, Dylan Nguyen
 
+keywords = ["integer", "boolean", "real", "if", "else", "endif", "while", "print", "return", "scan", "endwhile", "true", "false", "function"]
 
 # integer-real fsm
 def char_to_col_intreal(char):
@@ -47,7 +48,7 @@ def int_realDFSM(str):
         else:
             return "INTEGER"
     else:
-        return "Invalid Token"
+        return "INVALID TOKEN"
 
 def char_to_col_identifier(char):
     if char.isalpha():
@@ -86,6 +87,9 @@ def identifierDFSM(str):
         # print("char:", char, "state:", state)
 
     if state in accepting_states:
-        return "IDENTIFIER"
+        if str in keywords:
+            return "KEYWORD"
+        else:
+            return "IDENTIFIER"
     else:
         return "INVALID TOKEN"
