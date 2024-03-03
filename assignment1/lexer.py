@@ -61,7 +61,9 @@ def char_to_col_identifier(char):
 
 # identifier FSM
 def identifierDFSM(str):
-    
+    # Starting state
+    state = 1
+
     transition_table = [
         #   l, d, _, other
         [0, 1, 2, 3, 4],
@@ -72,9 +74,6 @@ def identifierDFSM(str):
         [5, 3, 4, 5, 6], # state = 5
         [6, 6, 6, 6, 6]  # state = 6
     ]
-
-    # Starting state
-    state = 1
 
     # Accepting states
     accepting_states = [2, 3, 4, 5]
