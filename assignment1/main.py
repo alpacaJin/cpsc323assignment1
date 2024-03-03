@@ -66,7 +66,6 @@ def main():
     with open(inputFileName, 'r') as inputFile, open(outputFileName, 'w') as outputFile:
 
         # Writes source code to terminal and output file
-        print("SOURCE CODE:\n\n")
         outputFile.write("SOURCE CODE:\n\n")
         for line in inputFile:
             outputFile.write(f"{line}\n")
@@ -128,8 +127,14 @@ def main():
                     str += char
                     continue
                 else:
-                    inputFile.seek(inputFile.tell() - 1)
-                    continue
+                    if char == "":
+                        if (any(c.isalpha() for c in str)):
+                            processIdentifier(str)
+                        else:
+                            processIntReal(str)
+                    else:
+                        inputFile.seek(inputFile.tell() - 1)
+                        continue
 
         outputFile.write("{:<{width}}{}\n\n".format("TOKENS", "LEXEMES", width=30))
         
