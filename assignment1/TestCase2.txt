@@ -1,0 +1,16 @@
+$ [* This code finds the factorial of any number *]
+function factorial (n integer)
+{
+    if (n == 1) then
+        return 1;
+    else
+        return n * factorial (n-1);
+}
+
+$ [* Variable declarations *]
+integer number;
+ 
+$
+    scan(number);
+    print(factorial(number));
+$

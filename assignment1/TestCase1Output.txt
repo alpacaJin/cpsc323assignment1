@@ -1,0 +1,51 @@
+SOURCE CODE:
+
+$ [* This code performs a basic calculation *]
+
+function add (num1 integer, num2 integer)
+
+{
+
+    sum = num1+num2
+
+    return sum - 3n
+
+}
+
+ 
+
+$
+
+    print(sum)
+
+$
+
+TOKENS                        LEXEMES
+
+SEPARATOR                     $
+KEYWORD                       function
+IDENTIFIER                    add
+SEPARATOR                     (
+IDENTIFIER                    num1
+KEYWORD                       integer
+SEPARATOR                     ,
+IDENTIFIER                    num2
+KEYWORD                       integer
+SEPARATOR                     )
+SEPARATOR                     {
+IDENTIFIER                    sum
+OPERATOR                      =
+IDENTIFIER                    num1
+OPERATOR                      +
+IDENTIFIER                    num2
+KEYWORD                       return
+IDENTIFIER                    sum
+OPERATOR                      -
+INVALID TOKEN                 3n
+SEPARATOR                     }
+SEPARATOR                     $
+KEYWORD                       print
+SEPARATOR                     (
+IDENTIFIER                    sum
+SEPARATOR                     )
+SEPARATOR                     $

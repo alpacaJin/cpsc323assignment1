@@ -1,0 +1,203 @@
+SOURCE CODE:
+
+$ [* This code calculates total interest over time *]
+
+function calcInterest (balance real, rate real, years integer)
+
+{
+
+    real interest;
+
+    interest = balance;
+
+    integer y;
+
+    y = 0;
+
+
+
+    while (y < years)
+
+    {
+
+        interest = interest + (interest * rate);
+
+        y = y + 1;
+
+    }
+
+
+
+    return interest - balance;
+
+}
+
+
+
+$ [* Variable declarations *]
+
+real balance, rate, maxInterest;
+
+integer years, threshold;
+
+ 
+
+$
+
+    scan(balance, rate, years);
+
+    print(balance);
+
+    print(rate);
+
+    pritn(years);
+
+    
+
+    maxInterest = calcInterest(balance, rate, years);
+
+
+
+    threshold = 10000.00;
+
+    if (maxInterest > threshold) then
+
+        return 0;
+
+    else
+
+        return 1;
+
+    endif
+
+$
+
+TOKENS                        LEXEMES
+
+SEPARATOR                     $
+KEYWORD                       function
+IDENTIFIER                    calcInterest
+SEPARATOR                     (
+IDENTIFIER                    balance
+KEYWORD                       real
+SEPARATOR                     ,
+IDENTIFIER                    rate
+KEYWORD                       real
+SEPARATOR                     ,
+IDENTIFIER                    years
+KEYWORD                       integer
+SEPARATOR                     )
+SEPARATOR                     {
+KEYWORD                       real
+IDENTIFIER                    interest
+SEPARATOR                     ;
+IDENTIFIER                    interest
+OPERATOR                      =
+IDENTIFIER                    balance
+SEPARATOR                     ;
+KEYWORD                       integer
+IDENTIFIER                    y
+SEPARATOR                     ;
+IDENTIFIER                    y
+OPERATOR                      =
+INTEGER                       0
+SEPARATOR                     ;
+KEYWORD                       while
+SEPARATOR                     (
+IDENTIFIER                    y
+OPERATOR                      <
+IDENTIFIER                    years
+SEPARATOR                     )
+SEPARATOR                     {
+IDENTIFIER                    interest
+OPERATOR                      =
+IDENTIFIER                    interest
+OPERATOR                      +
+SEPARATOR                     (
+IDENTIFIER                    interest
+OPERATOR                      *
+IDENTIFIER                    rate
+SEPARATOR                     )
+SEPARATOR                     ;
+IDENTIFIER                    y
+OPERATOR                      =
+IDENTIFIER                    y
+OPERATOR                      +
+INTEGER                       1
+SEPARATOR                     ;
+SEPARATOR                     }
+KEYWORD                       return
+IDENTIFIER                    interest
+OPERATOR                      -
+IDENTIFIER                    balance
+SEPARATOR                     ;
+SEPARATOR                     }
+SEPARATOR                     $
+KEYWORD                       real
+IDENTIFIER                    balance
+SEPARATOR                     ,
+IDENTIFIER                    rate
+SEPARATOR                     ,
+IDENTIFIER                    maxInterest
+SEPARATOR                     ;
+KEYWORD                       integer
+IDENTIFIER                    years
+SEPARATOR                     ,
+IDENTIFIER                    threshold
+SEPARATOR                     ;
+SEPARATOR                     $
+KEYWORD                       scan
+SEPARATOR                     (
+IDENTIFIER                    balance
+SEPARATOR                     ,
+IDENTIFIER                    rate
+SEPARATOR                     ,
+IDENTIFIER                    years
+SEPARATOR                     )
+SEPARATOR                     ;
+KEYWORD                       print
+SEPARATOR                     (
+IDENTIFIER                    balance
+SEPARATOR                     )
+SEPARATOR                     ;
+KEYWORD                       print
+SEPARATOR                     (
+IDENTIFIER                    rate
+SEPARATOR                     )
+SEPARATOR                     ;
+IDENTIFIER                    pritn
+SEPARATOR                     (
+IDENTIFIER                    years
+SEPARATOR                     )
+SEPARATOR                     ;
+IDENTIFIER                    maxInterest
+OPERATOR                      =
+IDENTIFIER                    calcInterest
+SEPARATOR                     (
+IDENTIFIER                    balance
+SEPARATOR                     ,
+IDENTIFIER                    rate
+SEPARATOR                     ,
+IDENTIFIER                    years
+SEPARATOR                     )
+SEPARATOR                     ;
+IDENTIFIER                    threshold
+OPERATOR                      =
+REAL                          10000.00
+SEPARATOR                     ;
+KEYWORD                       if
+SEPARATOR                     (
+IDENTIFIER                    maxInterest
+OPERATOR                      >
+IDENTIFIER                    threshold
+SEPARATOR                     )
+IDENTIFIER                    then
+KEYWORD                       return
+INTEGER                       0
+SEPARATOR                     ;
+KEYWORD                       else
+KEYWORD                       return
+INTEGER                       1
+SEPARATOR                     ;
+KEYWORD                       endif
+SEPARATOR                     $

@@ -1,0 +1,85 @@
+SOURCE CODE:
+
+$ [* This code finds the factorial of any number *]
+
+function factorial (n integer)
+
+{
+
+    if (n == 1) then
+
+        return 1;
+
+    else
+
+        return n * factorial (n-1);
+
+}
+
+
+
+$ [* Variable declarations *]
+
+integer number;
+
+ 
+
+$
+
+    scan(number);
+
+    print(factorial(number));
+
+$
+
+TOKENS                        LEXEMES
+
+SEPARATOR                     $
+KEYWORD                       function
+IDENTIFIER                    factorial
+SEPARATOR                     (
+IDENTIFIER                    n
+KEYWORD                       integer
+SEPARATOR                     )
+SEPARATOR                     {
+KEYWORD                       if
+SEPARATOR                     (
+IDENTIFIER                    n
+OPERATOR                      ==
+INTEGER                       1
+SEPARATOR                     )
+IDENTIFIER                    then
+KEYWORD                       return
+INTEGER                       1
+SEPARATOR                     ;
+KEYWORD                       else
+KEYWORD                       return
+IDENTIFIER                    n
+OPERATOR                      *
+IDENTIFIER                    factorial
+SEPARATOR                     (
+IDENTIFIER                    n
+OPERATOR                      -
+INTEGER                       1
+SEPARATOR                     )
+SEPARATOR                     ;
+SEPARATOR                     }
+SEPARATOR                     $
+KEYWORD                       integer
+IDENTIFIER                    number
+SEPARATOR                     ;
+SEPARATOR                     $
+KEYWORD                       scan
+SEPARATOR                     (
+IDENTIFIER                    number
+SEPARATOR                     )
+SEPARATOR                     ;
+KEYWORD                       print
+SEPARATOR                     (
+IDENTIFIER                    factorial
+SEPARATOR                     (
+IDENTIFIER                    number
+SEPARATOR                     )
+SEPARATOR                     )
+SEPARATOR                     ;
+SEPARATOR                     $
