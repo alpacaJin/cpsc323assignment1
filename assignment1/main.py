@@ -69,7 +69,6 @@ def main():
         print("SOURCE CODE:\n\n")
         outputFile.write("SOURCE CODE:\n\n")
         for line in inputFile:
-            print(line)
             outputFile.write(f"{line}\n")
         outputFile.write("\n")
 
@@ -136,6 +135,8 @@ def main():
         
         for entry in output:
             outputFile.write("{:<{width}}{}\n".format(entry[0], entry[1], width=30))
+
+        print("Source code and tokens have succesfully been written to the output file.")
 
 if __name__ == "__main__":
     main()
