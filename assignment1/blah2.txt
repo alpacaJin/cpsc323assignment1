@@ -1,0 +1,11 @@
+SOURCE CODE:
+
+00. +.123 # %
+
+TOKENS                        LEXEMES
+
+OPERATOR                      +
+INVALID TOKEN                 .
+REAL                          00.123
+INVALID TOKEN                 #
+INVALID TOKEN                 %

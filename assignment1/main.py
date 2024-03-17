@@ -61,7 +61,7 @@ def main():
     if inputFileName == "exit":
         sys.exit(0)
     
-    outputFileName = input("Enter the desired output file name: ")
+    outputFileName = input("Enter the desired output file name (please add .txt): ")
 
     with open(inputFileName, 'r') as inputFile, open(outputFileName, 'w') as outputFile:
 
@@ -112,18 +112,21 @@ def main():
 
             if char.isalnum():
                 str += char
+                print(str)
 
                 char = inputFile.read(1)
                 if isOperator(char) or isSeparator(char) or char.isspace():
                     if (any(c.isalpha() for c in str)):
                         processIdentifier(str)
                     else:
+                        print("callingintreal")
                         processIntReal(str)
 
                     str = ""
                     inputFile.seek(inputFile.tell() - 1)
                     continue
                 elif char == ".":
+                    # TODO: if previous was white space or if next was white space, call invalid on the str through int_realDFSM
                     str += char
                     continue
                 else:
@@ -131,10 +134,16 @@ def main():
                         if (any(c.isalpha() for c in str)):
                             processIdentifier(str)
                         else:
+                            print("callingintreal2")
                             processIntReal(str)
                     else:
                         inputFile.seek(inputFile.tell() - 1)
                         continue
+            else:
+                # handles every other illegal tokens
+                if char.isspace():
+                    continue
+                output.append(["INVALID TOKEN", char])
 
         outputFile.write("{:<{width}}{}\n\n".format("TOKENS", "LEXEMES", width=30))
         
@@ -145,7 +154,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
 
