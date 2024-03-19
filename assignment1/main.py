@@ -80,7 +80,9 @@ def main():
             
             if char == "":
                 break
-
+            
+            print("current char: %s" % char)
+            print("current str: %s" % str)
             # Handles beginning of comments
             if char == "[":
                 char = inputFile.read(1)
@@ -112,9 +114,10 @@ def main():
 
             if char.isalnum():
                 str += char
-                print(str)
+                print("is alnum str: %s" % str)
 
                 char = inputFile.read(1)
+
                 if isOperator(char) or isSeparator(char) or char.isspace():
                     if (any(c.isalpha() for c in str)):
                         processIdentifier(str)
@@ -124,10 +127,6 @@ def main():
 
                     str = ""
                     inputFile.seek(inputFile.tell() - 1)
-                    continue
-                elif char == ".":
-                    # TODO: if previous was white space or if next was white space, call invalid on the str through int_realDFSM
-                    str += char
                     continue
                 else:
                     if char == "":
@@ -139,11 +138,36 @@ def main():
                     else:
                         inputFile.seek(inputFile.tell() - 1)
                         continue
+            elif char == ".":
+                str += char
+                # TODO: if previous was white space or if next was white space, call invalid on the str through int_realDFSM
+                print("char: %s" % char)
+                print("current pos: ", inputFile.tell())
+                inputFile.seek(inputFile.tell() - 2)
+                prevChar = inputFile.read(1)
+                inputFile.seek(inputFile.tell() + 1)
+                nextChar = inputFile.read(1)
+                inputFile.seek(inputFile.tell() - 1)
+                print("prev char: %s" % prevChar)
+                print("next char: %s" % nextChar)
+                print("elif . :%s" % str)
+                # char2 = inputFile.tell() + 1
+                # print("tell: %s" % char2)
+                if nextChar.isnumeric():
+                    continue
+                
+                if prevChar == " " or nextChar == " ":
+                    print("callingintreal3")
+                    processIntReal(str)
+                    str = ""
+                # str += char
+                continue
             else:
                 # handles every other illegal tokens
                 if char.isspace():
                     continue
                 output.append(["INVALID TOKEN", char])
+            
 
         outputFile.write("{:<{width}}{}\n\n".format("TOKENS", "LEXEMES", width=30))
         
