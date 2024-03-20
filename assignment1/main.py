@@ -61,7 +61,7 @@ def main():
     if inputFileName == "exit":
         sys.exit(0)
     
-    outputFileName = input("Enter the desired output file name: ")
+    outputFileName = input("Enter the desired output file name (please add .txt): ")
 
     with open(inputFileName, 'r') as inputFile, open(outputFileName, 'w') as outputFile:
 
@@ -113,7 +113,9 @@ def main():
             if char.isalnum():
                 str += char
 
+                # read next character from input file
                 char = inputFile.read(1)
+
                 if isOperator(char) or isSeparator(char) or char.isspace():
                     if (any(c.isalpha() for c in str)):
                         processIdentifier(str)
@@ -123,19 +125,51 @@ def main():
                     str = ""
                     inputFile.seek(inputFile.tell() - 1)
                     continue
-                elif char == ".":
-                    str += char
-                    continue
                 else:
+                    # check for end of alnum
                     if char == "":
                         if (any(c.isalpha() for c in str)):
                             processIdentifier(str)
                         else:
                             processIntReal(str)
+                        continue
+                    elif not char.isalnum() and char != ".":
+                        if (any(c.isalpha() for c in str)):
+                            processIdentifier(str)
+                        else:
+                            processIntReal(str)
+                        str = ""
+                        inputFile.seek(inputFile.tell() - 1)
+                        continue
                     else:
                         inputFile.seek(inputFile.tell() - 1)
                         continue
+            # handles invalid tokens in reals
+            if char == ".":
+                str += char
 
+                # read next character from input file
+                char = inputFile.read(1)
+
+                # get whole string
+                if char.isalnum() or char == ".":
+                    inputFile.seek(inputFile.tell() - 1)
+                    continue
+                # process if whole string is received
+                else:
+                    inputFile.seek(inputFile.tell() - 1)
+                    if (any(c.isalpha() for c in str)):
+                            processIdentifier(str)
+                    else:
+                        processIntReal(str)
+                    str = ""
+                continue
+            else:
+                # handles every other illegal tokens
+                if char.isspace():
+                    continue
+                output.append(["INVALID TOKEN", char])
+            
         outputFile.write("{:<{width}}{}\n\n".format("TOKENS", "LEXEMES", width=30))
         
         for entry in output:
@@ -145,7 +179,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
 

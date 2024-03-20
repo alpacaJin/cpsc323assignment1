@@ -93,3 +93,4 @@ def identifierDFSM(str):
             return "IDENTIFIER"
     else:
         return "INVALID TOKEN"
+
