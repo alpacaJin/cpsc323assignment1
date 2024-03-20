@@ -80,10 +80,6 @@ def main():
             
             if char == "":
                 break
-            
-            print("current char: ", char)
-            print("current position: ", inputFile.tell())
-            print("current str: ", str)
 
             # Handles beginning of comments
             if char == "[":
@@ -154,9 +150,6 @@ def main():
 
                 # read next character from input file
                 char = inputFile.read(1)
-                print("char dot: ", char)
-                print("str dot: ", str)
-                print("position dot:", inputFile.tell())
 
                 # get whole string
                 if char.isalnum() or char == ".":
@@ -164,7 +157,6 @@ def main():
                     continue
                 # process if whole string is received
                 else:
-                    print("Scary")
                     inputFile.seek(inputFile.tell() - 1)
                     if (any(c.isalpha() for c in str)):
                             processIdentifier(str)
