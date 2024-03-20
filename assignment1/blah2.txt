@@ -1,6 +1,6 @@
 SOURCE CODE:
 
-00. + .123 # %
+00. +.123# % ...bjjk 123+456bkfbwkfblwq .8498573fn.nivfwik829oww khfgkw ..
 
 TOKENS                        LEXEMES
 
@@ -9,3 +9,10 @@ OPERATOR                      +
 INVALID TOKEN                 .123
 INVALID TOKEN                 #
 INVALID TOKEN                 %
+INVALID TOKEN                 ...bjjk
+INTEGER                       123
+OPERATOR                      +
+INVALID TOKEN                 456bkfbwkfblwq
+INVALID TOKEN                 .8498573fn.nivfwik829oww
+IDENTIFIER                    khfgkw
+INVALID TOKEN                 ..
