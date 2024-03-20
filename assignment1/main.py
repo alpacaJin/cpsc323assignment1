@@ -43,7 +43,6 @@ def processIdentifier(str):
     elif state == "KEYWORD":
         output.append(["KEYWORD", str])
     elif state == "INVALID TOKEN":
-        print("processIdentifier: invalid token")
         output.append(["INVALID TOKEN", str])
 
 def processIntReal(str):
@@ -54,7 +53,6 @@ def processIntReal(str):
     elif state == "REAL":
         output.append(["REAL", str])
     elif state == "INVALID TOKEN":
-        print("processIntReal: invalid token")
         output.append(["INVALID TOKEN", str])
 
 def main():
@@ -83,9 +81,10 @@ def main():
             if char == "":
                 break
             
-            print("current char: %s" % char)
-            print("current pos: ", inputFile.tell())
-            print("current str: %s" % str)
+            print("current char: ", char)
+            print("current position: ", inputFile.tell())
+            print("current str: ", str)
+
             # Handles beginning of comments
             if char == "[":
                 char = inputFile.read(1)
@@ -117,16 +116,14 @@ def main():
 
             if char.isalnum():
                 str += char
-                print("is alnum str: %s" % str)
 
+                # read next character from input file
                 char = inputFile.read(1)
-                print("next char: %s" % char)
+
                 if isOperator(char) or isSeparator(char) or char.isspace():
                     if (any(c.isalpha() for c in str)):
-                        print("first")
                         processIdentifier(str)
                     else:
-                        print("callingintreal")
                         processIntReal(str)
 
                     str = ""
@@ -138,15 +135,12 @@ def main():
                         if (any(c.isalpha() for c in str)):
                             processIdentifier(str)
                         else:
-                            print("callingintreal2")
-                            print("in not char: %s" % str)
                             processIntReal(str)
                         continue
                     elif not char.isalnum() and char != ".":
                         if (any(c.isalpha() for c in str)):
                             processIdentifier(str)
                         else:
-                            print("callingintreal5")
                             processIntReal(str)
                         str = ""
                         inputFile.seek(inputFile.tell() - 1)
@@ -154,50 +148,36 @@ def main():
                     else:
                         inputFile.seek(inputFile.tell() - 1)
                         continue
-                    
+            # handles invalid tokens in reals
             if char == ".":
                 str += char
-                # TODO: if previous was white space or if next was white space, call invalid on the str through int_realDFSM
-                print("char: %s" % char)
-                # inputFile.seek(inputFile.tell() - 2)
-                # prevChar = inputFile.read(1)
-                # inputFile.seek(inputFile.tell() + 1)
-                print("elif . :%s" % str)
-                nextChar = inputFile.read(1)
-                # print("prev char: %s" % prevChar)
-                print("next char: %s" % nextChar)
-                # print("elif . :%s" % str)
-                # char2 = inputFile.tell() + 1
-                # print("tell: %s" % char2)
-                # nextChar is a number, add it to the str
-                if nextChar.isalnum() or nextChar == ".":
+
+                # read next character from input file
+                char = inputFile.read(1)
+                print("char dot: ", char)
+                print("str dot: ", str)
+                print("position dot:", inputFile.tell())
+
+                # get whole string
+                if char.isalnum() or char == ".":
                     inputFile.seek(inputFile.tell() - 1)
                     continue
+                # process if whole string is received
                 else:
-                    # print("callingintreal3")
+                    print("Scary")
+                    inputFile.seek(inputFile.tell() - 1)
                     if (any(c.isalpha() for c in str)):
                             processIdentifier(str)
                     else:
-                        print("callingintreal2")
                         processIntReal(str)
                     str = ""
-                # if nextChar == " ":
-                #     print("callingintreal3")
-                #     processIntReal(str)
-                #     str = ""
-
-                # print("issue?")
                 continue
             else:
                 # handles every other illegal tokens
                 if char.isspace():
                     continue
-                print("end else: invalid token: %s" % char)
                 output.append(["INVALID TOKEN", char])
-                if char == "":
-                    print("yay")
             
-
         outputFile.write("{:<{width}}{}\n\n".format("TOKENS", "LEXEMES", width=30))
         
         for entry in output:
