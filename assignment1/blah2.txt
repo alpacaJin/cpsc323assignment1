@@ -1,23 +1,107 @@
 SOURCE CODE:
 
-00.&+.123@^&# % ..bk 231. +.46 .84n.n8o k. ..
+
+
+[* operator test *]
+
+= != > < <= => + - * / ==
+
++-*/
+
+[* separator test *]
+
+$ { } ; , () =
+
+)(
+
+[* keyword *]
+
+integer boolean real {} ; , if else endif return scan while endwhile
+
+true false
+
+[* integer *]
+
+1 1000 99 00000000000000
+
+[* real *]
+
+234.567 9.000001 000.00
+
+[* identifier *]
+
+z12_d_ Zzzz a1z4r zbc12__x x
+
+[* wrongTokens *]
+
+#
+
+_
+
+23rty
+
+000.
+
+.123
 
 
 TOKENS                        LEXEMES
 
-INVALID TOKEN                 00.
-INVALID TOKEN                 &
+OPERATOR                      =
+OPERATOR                      !=
+OPERATOR                      >
+OPERATOR                      <
+OPERATOR                      <=
+OPERATOR                      =>
 OPERATOR                      +
-INVALID TOKEN                 .123
-INVALID TOKEN                 @
-INVALID TOKEN                 ^
-INVALID TOKEN                 &
+OPERATOR                      -
+OPERATOR                      *
+OPERATOR                      /
+OPERATOR                      ==
+OPERATOR                      +
+OPERATOR                      -
+OPERATOR                      *
+OPERATOR                      /
+SEPARATOR                     $
+SEPARATOR                     {
+SEPARATOR                     }
+SEPARATOR                     ;
+SEPARATOR                     ,
+SEPARATOR                     (
+SEPARATOR                     )
+OPERATOR                      =
+SEPARATOR                     )
+SEPARATOR                     (
+KEYWORD                       integer
+KEYWORD                       boolean
+KEYWORD                       real
+SEPARATOR                     {
+SEPARATOR                     }
+SEPARATOR                     ;
+SEPARATOR                     ,
+KEYWORD                       if
+KEYWORD                       else
+KEYWORD                       endif
+KEYWORD                       return
+KEYWORD                       scan
+KEYWORD                       while
+KEYWORD                       endwhile
+KEYWORD                       true
+KEYWORD                       false
+INTEGER                       1
+INTEGER                       1000
+INTEGER                       99
+INTEGER                       00000000000000
+REAL                          234.567
+REAL                          9.000001
+REAL                          000.00
+IDENTIFIER                    z12_d_
+IDENTIFIER                    Zzzz
+IDENTIFIER                    a1z4r
+IDENTIFIER                    zbc12__x
+IDENTIFIER                    x
 INVALID TOKEN                 #
-INVALID TOKEN                 %
-INVALID TOKEN                 ..bk
-INVALID TOKEN                 231.
-OPERATOR                      +
-INVALID TOKEN                 .46
-INVALID TOKEN                 .84n.n8o
-INVALID TOKEN                 k.
-INVALID TOKEN                 ..
+INVALID TOKEN                 _
+INVALID TOKEN                 23rty
+INVALID TOKEN                 000.
+INVALID TOKEN                 .123

@@ -77,7 +77,7 @@ def main():
 
         while True:
             char = inputFile.read(1)
-            
+
             if char == "":
                 break
 
@@ -106,11 +106,11 @@ def main():
                 processSeparator(char)
                 continue
 
-            if isOperator(char):
+            if isOperator(char) or char == "!":
                 processOperator(char, inputFile)
                 continue
 
-            if char.isalnum():
+            if char.isalnum() or char == "_":
                 str += char
 
                 # read next character from input file
@@ -133,7 +133,7 @@ def main():
                         else:
                             processIntReal(str)
                         continue
-                    elif not char.isalnum() and char != ".":
+                    elif not char.isalnum() and char != "." and char != "_":
                         if (any(c.isalpha() for c in str)):
                             processIdentifier(str)
                         else:
@@ -180,3 +180,4 @@ def main():
 if __name__ == "__main__":
     main()
 
+# real, illegal tokens, underlines, !
