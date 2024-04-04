@@ -1,88 +1,112 @@
 from main import *
+import time
 
 # turn on printing
 switch = True
 
 # TODO: find a way to call lexer to take in
 
-def rat24s(lexeme):
+def rat24s(tokens, lexemes, index):
     # R1. <Rat24S>  ::=   $ <Opt Function Definitions>   $ <Opt Declaration List>  $ <Statement List>  $
-    if lexeme == '$':
-        if switch:
-            print("<Rat24S> -> $ <Opt Function Definitions>")
-        output.append("<Rat24S> -> $ <Opt Function Definitions>")
-        opt_function_definitions()
+    if index < len(lexemes):
+        if lexemes[index] == '$':
+            index += 1  # Move past the initial '$'
+            if switch:
+                print("<Rat24S> -> $ <Opt Function Definitions>")
+            
+            output.append("<Rat24S> -> $ <Opt Function Definitions>")
+        index = opt_function_definitions(tokens, lexemes, index)
+        
+        lexeme = lexemes[index]
         if lexeme == '$':
+            index += 1
             if switch:
                 print("<Rat24S> -> $ <Opt Declaration List>")
             output.append("<Rat24S> -> $ <Opt Declaration List>")
-            opt_declaration_list()
+            index = opt_declaration_list(tokens, lexemes, index)
             if lexeme == '$':
+                index += 1
                 if switch:
                     print("<Rat24S> -> $ <Statement List>")
                 output.append("<Rat24S -> $ <Statement List>")
-                statement_list()
+                index = statement_list(tokens, lexemes, index)
                 if lexeme == '$':
+                    index += 1
                     if switch:
                         print("<Rat24S> -> $") 
                         print("Parse completed")  
                     output.append("<Rat24S> -> $")
                 else:
                     if switch:
-                        print("Error: expected $")
+                        print("Error 1: expected $")
                     output.append("Error: expected $")
             else:
                 if switch:
-                    print("Error: expected $")
+                    print("Error 2: expected $")
                 output.append("Error: expected $")
         else:
             if switch:
-                print("Error: expected $")
+                print("Error 3: expected $")
             output.append("Error: expected $")
     else:
         if switch:
-            print("Error: expected $")
+            print("Error 4: expected $")
         output.append("Error: expected $")
 
+    return index
 
-def opt_function_definitions():
+
+def opt_function_definitions(tokens, lexemes, index):
     # R2. <Opt Function Definitions> ::= <Function Definitions>     |  <Empty>
     if switch:
         print("<Opt Function Definitions> -> <Function Definitions> | <Empty>")
     output.append("<Opt Function Definitions> -> <Function Definitions> | <Empty>")
     # TODO: figure out how to do OR
-    function_definitions()
+    function_definitions(tokens, lexemes, index)
     empty()
     return
 
-def function_definitions():
+def function_definitions(tokens, lexemes, index):
     # R3. <Function Definitions> ::= <Function><Function Definitions Prime>
     output.append("<Function Definitions> -> <Function><Function Definitions Prime>")
-    function()
-    function_definitions_prime()
+    function(tokens, lexemes, index)
+    function_definitions_prime(tokens, lexemes, index)
 
-def function_definitions_prime():
+def function_definitions_prime(tokens, lexemes, index):
     # R4. <Function Definitons Prime> ::= e | <Function Definitions>
-    function_definitions()
+    function_definitions(tokens, lexemes, index)
 
-def function(lexeme):
+def function(tokens, lexemes, index):
     # R5. <Function> ::= function  <Identifier>   ( <Opt Parameter List> )  <Opt Declaration List>  <Body>
+    lexeme = lexemes[index]
+    token = tokens[index+1]
+
+    print(lexeme, token)
+    time.sleep(5)
+    
     if lexeme == "function":
         if token == "IDENTIFIER":
             if switch:
                 print("<Function> ::= function <Identifier>")
             output.append("<Function> ::= function <Identifier>")
+            index += 2
+
+            # Testing
+            lexeme = lexemes[index]
+            token = tokens[index+1]
+            print(lexeme, token)
+            
             if lexeme == "(":
                 if switch:
                     print(" ( <Opt Parameter List>")
                 output.append(" ( <Opt Parameter List>")
-                opt_parameter_list()
+                index = opt_parameter_list(tokens, lexemes, index)
                 if lexeme == (")"):
                     if switch:
                         print(" ) <Opt Declaration List> <Body>")
                     output.append(" ) <Opt Declaration List> <Body>")
-                    opt_declaration_list()
-                    body()
+                    index = opt_declaration_list(tokens, lexemes, index)
+                    index = body(tokens, lexemes, index)
                 else:
                     if switch:
                         print("Error: expected )")
@@ -99,31 +123,39 @@ def function(lexeme):
         if switch:
             print("Error: expected function")
         output.append("Error: expected function")
+    
+    return index
 
-def opt_parameter_list():
+def opt_parameter_list(tokens, lexemes, index):
     # R6. <Opt Parameter List> ::=  <Parameter List>    |     <Empty>
     # TODO: fix this
-    parameter_list()
-    empty()
+    parameter_list(tokens, lexemes, index)
+    empty(tokens, lexemes, index)
 
-def parameter_list():
+def parameter_list(tokens, lexemes, index):
     # R7. <Parameter List> ::= <Parameter><Parameter List Prime>
     output.append("<Parameter List> -> <Parameter><Parameter List Prime>")
-    parameter()
-    parameter_list_prime()
+    parameter(tokens, lexemes, index)
+    parameter_list_prime(tokens, lexemes, index)
 
-def parameter_list_prime():
+def parameter_list_prime(tokens, lexemes, index):
     # R8. <Parameter List Prime> ::= e | <Parameter List>
-    parameter_list()
+    parameter_list(tokens, lexemes, index)
 
-def parameter():
+def parameter(tokens, lexemes, index):
     # R9. <Parameter> ::=  <IDs>  <Qualifier> 
     output.append("<Parameter> -> <IDs> <Qualifier>")
-    ids()
-    qualifier()
+    ids(tokens, lexemes, index)
+    qualifier(tokens, lexemes, index)
 
-def qualifier(lexeme):
-    # R10. <Qualifier> ::= integer   |    boolean   |  real 
+def qualifier(tokens, lexemes, index):
+    # R10. <Qualifier> ::= integer   |    boolean   |  real
+
+    lexeme = lexemes[index+2]
+
+    print("lexeme is: " + lexeme)
+    time.sleep(5)
+
     if lexeme == "integer":
         if switch:
             print("<Qualifier> -> integer")
@@ -163,7 +195,7 @@ def opt_declaration_list():
     declaration_list()
     empty()
 
-def declaration_list():
+def declaration_list(nextLexeme):
     # R13. <Declaration List> := <Declaration> ;<Declaration List Prime>
     output.append("<Declaration List> -> <Declaration> ;<Declaration List Prime>")
     declaration()
@@ -184,13 +216,14 @@ def declaration():
     qualifier()
     ids()
 
-def ids():
+def ids(tokens, lexemes, index):
     # R16. <IDs> ::= <Identifier><IDs Prime>
+    token = tokens[index]
     if token == "IDENTIFIER":
         output.append("<IDs> -> <Identifier><IDs Prime>")
         ids_prime()
 
-def ids_prime():
+def ids_prime(lexeme):
     # R17. <IDs Prime> ::= e | , <IDs>
     if lexeme == ",":
         if switch:
@@ -221,7 +254,7 @@ def statement():
     scan()
     While()
 
-def compound():
+def compound(lexeme):
     # R21. <Compound> ::=   {  <Statement List>  } 
     if lexeme == "{":
         output.append("<Compound> -> { <Statement List>")
@@ -239,7 +272,7 @@ def compound():
             print("Error: expected {")
         output.append("Error: expected {")
 
-def assign():
+def assign(token, lexeme, nextLexeme):
     # R22. <Assign> ::=     <Identifier> = <Expression> ;
     output.append("Assign -> <Identifier>")
     if token == "IDENTIFIER":
@@ -265,7 +298,7 @@ def assign():
             print("Error: expected IDENTIFIER")
         output.append("Error: expected IDENTIFIER")
 
-def If():
+def If(lexeme):
     # R23. <If> ::= if ( <Condition> ) <Statement> <If Prime>
     if lexeme == "if":
         if lexeme == "(":
@@ -328,7 +361,7 @@ def Return(lexeme):
             print("Error: expected return")
         output.append("Error: expected return")
 
-def return_prime():
+def return_prime(lexeme):
     # R26. <Return Prime> ::= ;     |     <Expression> ;
     if lexeme == ";":
         if switch:
@@ -345,7 +378,7 @@ def return_prime():
                 print("Error: expected ;")
             output.append("Error: expected ;")
 
-def Print():
+def Print(lexeme):
     # R27. <Print> ::=    print ( <Expression>);
     if lexeme == "print":
         if lexeme == "(":
@@ -378,7 +411,7 @@ def Print():
             print("Error: expected print")
         output.append("Error: expected print")
 
-def scan():
+def scan(lexeme):
     #R28. <Scan> ::=    scan ( <IDs> );
     if lexeme == "scan":
         if lexeme == "(":
@@ -412,7 +445,7 @@ def scan():
         output.append("Error: expected scan")
 
 
-def While():
+def While(lexeme):
     # R29. <While> ::=  while ( <Condition>  )  <Statement>  endwhile
     if lexeme == "while":
         if lexeme == "(":
@@ -453,7 +486,7 @@ def condition():
     relop()
     expression()
 
-def relop():
+def relop(lexeme):
     # R31. <Relop> ::=   ==   |   !=    |   >     |   <    |  <=   |    =>        
     if lexeme == "==" or "!=" or ">" or "<" or "<=" or "=>":
         output.append("<Relop> -> ", lexeme)
@@ -468,7 +501,7 @@ def expression():
     term()
     expression_prime()
 
-def expression_prime():
+def expression_prime(lexeme):
     # R33. <ExpressionPrime> ::= + <Term><ExpressionPrime> | - <Term><ExpressionPrime> | e
     if lexeme == "+" or "-":
         output.append("<Expression Prime> -> ", lexeme, " <Term><ExpressionPrime>")
@@ -481,14 +514,14 @@ def term():
     factor()
     term_prime()
 
-def term_prime():
+def term_prime(lexeme):
     # R35. <TermPrime> ::= * <Factor><TermPrime> | / <Factor><TermPrime> | e
     if lexeme == "*" or "/":
         output.append("<Term Prime> -> ", lexeme, " <Factor><TermPrime>")
         factor()
         term_prime()
 
-def factor():
+def factor(lexeme):
     # R36. <Factor> ::=      -  <Primary>    |    <Primary>
     if lexeme == "-":
         output.append("<Factor> -> - <Primary>")
@@ -497,7 +530,7 @@ def factor():
         output.append("<Factor> -> <Primary>")
         primary()
 
-def primary():
+def primary(token, lexeme):
     # R37. <Primary> ::= <Identifier> <Primary Prime>  |  <Integer>  |  ( <Expression )  |  <Real>  |  true  |  false
     if token == "IDENTIFIER":
         if switch:
@@ -533,7 +566,7 @@ def primary():
             print("Error: expected identifier, integer, real, true, false, or (")
         output.append("Error: expected identifier, integer, real, true, false, or (")
 
-def primary_prime():
+def primary_prime(lexeme):
     # R38. <Primary Prime> ::= e  |  ( <IDs> )
     if lexeme == "(":
         if switch:
@@ -554,3 +587,44 @@ def primary_prime():
 def empty():
     # R39. <Empty>   ::= e
     output.append("<Empty> -> e")
+
+
+def process_syntax_from_file(file_path):
+    tokens, lexemes = [], []
+    start_reading = False
+
+    with open(file_path, 'r') as file:
+        for line in file:
+            # Start reading tokens and lexemes after this header
+            if line.strip() == "TOKENS                        LEXEMES":
+                start_reading = True
+                continue
+            
+            if start_reading:
+                line = line.strip()
+                if not line:
+                    continue  # Skip empty lines
+                
+                # Check for the special case of "INVALID TOKEN"
+                if line.startswith("INVALID TOKEN"):
+                    token = "INVALID TOKEN"
+                    lexeme = line[len("INVALID TOKEN"):].strip()
+                else:
+                    parts = line.split(maxsplit=1)
+                    if len(parts) == 2:  # Valid lines with both token and lexeme
+                        token, lexeme = parts[0], parts[1].strip()
+                
+                tokens.append(token)
+                lexemes.append(lexeme)
+
+        if lexemes:
+            index = 0  # Start parsing from the first token and lexeme
+            while index < len(lexemes):
+                rat24s(tokens, lexemes, index)
+                index += 1
+        else:
+            print("No tokens or lexemes found.")
+
+if __name__ == "__main__":
+    file_path = "assignment2/TestCase1Output.txt"
+    process_syntax_from_file(file_path)
