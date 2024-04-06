@@ -1,10 +1,10 @@
 $ [* This code performs a basic calculation *]
 function add (num1 integer, num2 integer)
 {
-    sum = num1+num2
-    return sum - 3n
+    sum = num1+num2;
+    return sum - 3n;
 }
  
 $
-    print(sum)
+    print(sum);
 $
