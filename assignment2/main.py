@@ -178,7 +178,7 @@ def main():
             outputFile.write("{:<{width}}{}\n".format(entry[0], entry[1], width=30))
         
         # TODO: output
-        rat24s()
+        # rat24s()
 
         print("Source code and tokens have succesfully been written to the output file.")
 
