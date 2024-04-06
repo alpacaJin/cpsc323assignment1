@@ -1,10 +1,12 @@
 import sys
 from lexer import int_realDFSM, identifierDFSM
+from syntaxanalyzer import *
 
 separators = ['$', '(', ')', '{', '}', ';', ',']
 operators = ['==', '!=', '>', '<', '<=', '=>', '+', '-', '*', '/', '=']
 
 output = []
+# print(type(output))
 
 def isSeparator(char):
     return char in separators
@@ -174,6 +176,9 @@ def main():
         
         for entry in output:
             outputFile.write("{:<{width}}{}\n".format(entry[0], entry[1], width=30))
+        
+        # TODO: output
+        rat24s()
 
         print("Source code and tokens have succesfully been written to the output file.")
 
