@@ -70,13 +70,16 @@ def rat24s(tokens, lexemes, index):
 
 def opt_function_definitions(tokens, lexemes, index):
     # R2. <Opt Function Definitions> ::= <Function Definitions>     |  <Empty>
-    if switch:
-        print("<Opt Function Definitions> -> <Function Definitions> | <Empty>")
-    output.append("<Opt Function Definitions> -> <Function Definitions> | <Empty>")
     # Fixed OR, EXPECTING function 
     if lexemes[index] == "function":
+        if switch:
+            print("<Opt Function Definitions> -> <Function Definitions>")
+        output.append("<Opt Function Definitions> -> <Function Definitions>")
         index = function_definitions(tokens, lexemes, index)
     else:
+        if switch:
+            print("<Opt Function Definitions> -> <Empty>")
+        output.append("<Opt Function Definitions> -> <Empty>")
         empty()
     return index
 
