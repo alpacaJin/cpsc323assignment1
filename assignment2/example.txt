@@ -1,7 +1,7 @@
 
 TOKEN: SEPARATOR    LEXEME: $
 <Rat24S> -> $ <Opt Function Definitions>
-<Opt Function Definitions> -> <Function Definitions> | <Empty>
+<Opt Function Definitions> -> <Function Definitions>
 <Function Definitions> -> <Function><Function Definitions Prime>
 
 TOKEN: KEYWORD      LEXEME: function

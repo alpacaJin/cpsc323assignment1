@@ -70,13 +70,16 @@ def rat24s(tokens, lexemes, index):
 
 def opt_function_definitions(tokens, lexemes, index):
     # R2. <Opt Function Definitions> ::= <Function Definitions>     |  <Empty>
-    if switch:
-        print("<Opt Function Definitions> -> <Function Definitions> | <Empty>")
-    output.append("<Opt Function Definitions> -> <Function Definitions> | <Empty>")
     # Fixed OR, EXPECTING function 
     if lexemes[index] == "function":
+        if switch:
+            print("<Opt Function Definitions> -> <Function Definitions>")
+        output.append("<Opt Function Definitions> -> <Function Definitions>")
         index = function_definitions(tokens, lexemes, index)
     else:
+        if switch:
+            print("<Opt Function Definitions> -> <Empty>")
+        output.append("<Opt Function Definitions> -> <Empty>")
         empty()
     return index
 
@@ -715,9 +718,9 @@ def factor(tokens, lexemes, index):
     return index
 
 def primary(tokens, lexemes, index):
-    # R37. <Primary> ::= <Identifier> <Primary Prime>  |  <Integer>  |  ( <Expression )  |  <Real>  |  true  |  false
+    # R37. <Primary> ::= <Identifier> <Primary Prime>  |  <Integer>  |  ( <Expression> )  |  <Real>  |  true  |  false
     # expression causes index-1
-    if tokens[index - 1] == "IDENTIFIER" or tokens[index] == "IDENTIFIER":
+    if tokens[index-1] == "IDENTIFIER" or tokens[index] == "IDENTIFIER":
         # for regulars
         if tokens[index] == "IDENTIFIER":
             index = lexer_incrementor(tokens, lexemes, index)
@@ -731,14 +734,22 @@ def primary(tokens, lexemes, index):
         if switch:
             print("<Primary> -> <Integer>")
         output.append("<Primary> -> <Integer>")
-    elif tokens[index] == "REAL":
+    elif tokens[index-1] == "REAL" or tokens[index] == "REAL":
+        if tokens[index] == "REAL":
+            index = lexer_incrementor(tokens, lexemes, index)
         if switch:
             print("<Primary> -> <Real>")
         output.append("<Primary> -> <Real>")
-    elif lexemes[index] == "true" or lexemes[index] == "false":
-        if switch:
-            print("<Primary> -> ", lexemes[index])
-        output.append("<Primary> -> ", lexemes[index])
+    elif lexemes[index-1] in ["true","false"] or lexemes[index] in ["true", "false"]:
+        if lexemes[index] in ["true", "false"]:
+            index = lexer_incrementor(tokens, lexemes, index)
+            if switch:
+                print("<Primary> -> ", lexemes[index-1])
+            output.append("<Primary> -> " + lexemes[index-1])
+        else:
+            if switch:
+                print("<Primary> -> ", lexemes[index-1])
+            output.append("<Primary> -> " + lexemes[index-1])
     elif lexemes[index] == "(": 
         index = lexer_incrementor(tokens, lexemes, index)
         if switch:

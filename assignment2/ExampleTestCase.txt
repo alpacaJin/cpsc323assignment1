@@ -9,6 +9,7 @@ function convertx (fahr integer)
 
 $
     integer low, high, step; [* declarations *]
+    boolean test1, test2, test3;
 $
     scan (low, high, step);
     while (low <= high )
