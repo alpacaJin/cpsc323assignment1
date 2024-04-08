@@ -141,7 +141,7 @@ TOKEN: KEYWORD      LEXEME: while
 <Statement> -> <While>
 
 TOKEN: SEPARATOR    LEXEME: (
-<While> -> while ( <Condition>
+<While> -> while ( <Condition> ) <Statement> endwhile
 <Condition> -> <Expression> <Relop> <Expression>
 
 TOKEN: IDENTIFIER   LEXEME: low

@@ -1,7 +1,7 @@
 import time
 
 # turn on/off printing
-switch = True
+switch = False
 output = []
 
 # prints to output file and increments tokens
