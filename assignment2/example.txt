@@ -1,0 +1,257 @@
+
+TOKEN: SEPARATOR    LEXEME: $
+<Rat24S> -> $ <Opt Function Definitions>
+<Opt Function Definitions> -> <Function Definitions> | <Empty>
+<Function Definitions> -> <Function><Function Definitions Prime>
+
+TOKEN: KEYWORD      LEXEME: function
+
+TOKEN: IDENTIFIER   LEXEME: convertx
+<Function> -> function <Identifier> ( <Opt Parameter List> ) <Opt Declaration List> <Body>
+
+TOKEN: SEPARATOR    LEXEME: (
+<Opt Parameter List -> <Parameter List>
+<Parameter List> -> <Parameter><Parameter List Prime>
+<Parameter> -> <IDs> <Qualifier>
+
+TOKEN: IDENTIFIER   LEXEME: fahr
+<IDs> -> <Identifier><IDs Prime>
+<IDs Prime> -> e
+
+TOKEN: KEYWORD      LEXEME: integer
+<Qualifier> -> integer
+<Parameter List Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: )
+<Opt Declaration List> -> <Empty>
+<Empty> -> e
+
+TOKEN: SEPARATOR    LEXEME: {
+<Body> -> { <Statement List> }
+<Statement List> -> <Statement> <Statement List Prime>
+
+TOKEN: KEYWORD      LEXEME: return
+<Statement> -> <Return>
+<Return> -> return <Return Prime>
+<Return Prime> -> <Expression> ;
+
+TOKEN: INTEGER      LEXEME: 5
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Integer>
+
+TOKEN: OPERATOR     LEXEME: *
+<Term Prime> -> * <Factor><Term Prime>
+<Factor> -> <Primary>
+
+TOKEN: SEPARATOR    LEXEME: (
+<Primary> -> ( <Expression> )
+
+TOKEN: IDENTIFIER   LEXEME: fahr
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+
+TOKEN: OPERATOR     LEXEME: -
+<Factor> -> - <Primary>
+
+TOKEN: INTEGER      LEXEME: 32
+<Primary> -> <Integer>
+
+TOKEN: SEPARATOR    LEXEME: )
+<Term Prime> -> e
+<Expression Prime> -> e
+
+TOKEN: OPERATOR     LEXEME: /
+<Term Prime> -> / <Factor><Term Prime>
+<Factor> -> <Primary>
+
+TOKEN: INTEGER      LEXEME: 9
+<Primary> -> <Integer>
+
+TOKEN: SEPARATOR    LEXEME: ;
+<Term Prime> -> e
+<Expression Prime> -> e
+<Statement List Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: }
+<Function Definitions Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: $
+<Rat24S> -> $ <Opt Declaration List>
+<Opt Declaration List> -> <Declaration List>
+<Declaration List> -> <Declaration> ;<Declaration List Prime>
+<Declaration> -> <Qualifier> <IDs>
+
+TOKEN: KEYWORD      LEXEME: integer
+<Qualifier> -> integer
+
+TOKEN: IDENTIFIER   LEXEME: low
+<IDs> -> <Identifier><IDs Prime>
+
+TOKEN: SEPARATOR    LEXEME: ,
+<IDs Prime> -> , <IDs Prime>
+
+TOKEN: IDENTIFIER   LEXEME: high
+<IDs> -> <Identifier><IDs Prime>
+
+TOKEN: SEPARATOR    LEXEME: ,
+<IDs Prime> -> , <IDs Prime>
+
+TOKEN: IDENTIFIER   LEXEME: step
+<IDs> -> <Identifier><IDs Prime>
+<IDs Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: ;
+<Declaration List Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: $
+<Rat24S -> $ <Statement List>
+<Statement List> -> <Statement> <Statement List Prime>
+
+TOKEN: KEYWORD      LEXEME: scan
+<Statement> -> <Scan>
+
+TOKEN: SEPARATOR    LEXEME: (
+<Scan> -> scan ( <IDs> );
+
+TOKEN: IDENTIFIER   LEXEME: low
+<IDs> -> <Identifier><IDs Prime>
+
+TOKEN: SEPARATOR    LEXEME: ,
+<IDs Prime> -> , <IDs Prime>
+
+TOKEN: IDENTIFIER   LEXEME: high
+<IDs> -> <Identifier><IDs Prime>
+
+TOKEN: SEPARATOR    LEXEME: ,
+<IDs Prime> -> , <IDs Prime>
+
+TOKEN: IDENTIFIER   LEXEME: step
+<IDs> -> <Identifier><IDs Prime>
+<IDs Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: )
+
+TOKEN: SEPARATOR    LEXEME: ;
+<Statement List Prime> -> <Statement List>
+<Statement List> -> <Statement> <Statement List Prime>
+
+TOKEN: KEYWORD      LEXEME: while
+<Statement> -> <While>
+
+TOKEN: SEPARATOR    LEXEME: (
+<While> -> while ( <Condition> ) <Statement> endwhile
+<Condition> -> <Expression> <Relop> <Expression>
+
+TOKEN: IDENTIFIER   LEXEME: low
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Identifier> <Primary Prime>
+<Primary Prime> -> e
+
+TOKEN: OPERATOR     LEXEME: <=
+<Term Prime> -> e
+<Expression Prime> -> e
+<Relop> -> <=
+
+TOKEN: IDENTIFIER   LEXEME: high
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Identifier> <Primary Prime>
+<Primary Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: )
+<Term Prime> -> e
+<Expression Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: {
+<Statement> -> <Compound>
+<Compound> -> { <Statement List> }
+<Statement List> -> <Statement> <Statement List Prime>
+
+TOKEN: KEYWORD      LEXEME: print
+<Statement> -> <Print>
+
+TOKEN: SEPARATOR    LEXEME: (
+<Print> -> print ( <Expression>);
+
+TOKEN: IDENTIFIER   LEXEME: low
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Identifier> <Primary Prime>
+<Primary Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: )
+<Term Prime> -> e
+<Expression Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: ;
+<Statement List Prime> -> <Statement List>
+<Statement List> -> <Statement> <Statement List Prime>
+
+TOKEN: KEYWORD      LEXEME: print
+<Statement> -> <Print>
+
+TOKEN: SEPARATOR    LEXEME: (
+<Print> -> print ( <Expression>);
+
+TOKEN: IDENTIFIER   LEXEME: convertx
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Identifier> <Primary Prime>
+
+TOKEN: SEPARATOR    LEXEME: (
+<Primary Prime> -> ( <IDs> )
+
+TOKEN: IDENTIFIER   LEXEME: low
+<IDs> -> <Identifier><IDs Prime>
+<IDs Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: )
+
+TOKEN: SEPARATOR    LEXEME: )
+<Term Prime> -> e
+<Expression Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: ;
+<Statement List Prime> -> <Statement List>
+<Statement List> -> <Statement> <Statement List Prime>
+
+TOKEN: IDENTIFIER   LEXEME: low
+<Statement> -> <Assign>
+Assign -> <Identifier> = <Expression> ;
+
+TOKEN: OPERATOR     LEXEME: =
+
+TOKEN: IDENTIFIER   LEXEME: low
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Identifier> <Primary Prime>
+<Primary Prime> -> e
+
+TOKEN: OPERATOR     LEXEME: +
+<Term Prime> -> e
+<Expression Prime> -> + <Term><Expression Prime>
+
+TOKEN: IDENTIFIER   LEXEME: step
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Identifier> <Primary Prime>
+<Primary Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: ;
+<Term Prime> -> e
+<Expression Prime> -> e
+<Statement List Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: }
+
+TOKEN: KEYWORD      LEXEME: endwhile
+<Statement List Prime> -> e
+<Rat24S> -> $

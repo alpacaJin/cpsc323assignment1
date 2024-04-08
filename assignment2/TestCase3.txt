@@ -1,0 +1,23 @@
+$ [* This program is called TestCase3.txt *]
+function calcArea (length integer, width integer)
+{
+    area = length + width;
+    return area;
+}
+$
+    integer area1, area2;
+$
+    area1 = 1;
+    area2 = 100;
+
+    scan (area1, area2);
+    while (area2 > area1)
+    {
+        length = length + 2;
+        width = width + 2;
+
+        area1 = calcArea(legnth, width);
+        print(area1);
+    }
+    endwhile
+$
