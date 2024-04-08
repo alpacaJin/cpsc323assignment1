@@ -1,0 +1,12 @@
+$
+function multiply (num1 integer, num2 integer)
+{
+    product = num1 * num2;
+    return product;
+}
+$
+    integer num3;
+$
+    print(product);
+$
+

@@ -6,7 +6,6 @@ separators = ['$', '(', ')', '{', '}', ';', ',']
 operators = ['==', '!=', '>', '<', '<=', '=>', '+', '-', '*', '/', '=']
 
 output = []
-# print(type(output))
 
 def isSeparator(char):
     return char in separators
@@ -58,20 +57,20 @@ def processIntReal(str):
         output.append(["INVALID TOKEN", str])
 
 def main():
-    inputFileName = input("Enter the input file name (or type exit to exit the program): ")
+    inputFileName = input("Enter the input file name with .txt at the end (or type exit to exit the program): ")
 
     if inputFileName == "exit":
         sys.exit(0)
     
-    outputFileName = input("Enter the desired output file name (please add .txt): ")
+    # outputFileName = input("Enter the desired output file name (please add .txt): ")
 
-    with open(inputFileName, 'r') as inputFile, open(outputFileName, 'w') as outputFile:
-
+    with open(inputFileName, 'r') as inputFile:
+    # , open(outputFileName, 'w') as outputFile
         # Writes source code to terminal and output file
-        outputFile.write("SOURCE CODE:\n\n")
-        for line in inputFile:
-            outputFile.write(f"{line}\n")
-        outputFile.write("\n")
+        # outputFile.write("SOURCE CODE:\n\n")
+        # for line in inputFile:
+        #     outputFile.write(f"{line}\n")
+        # outputFile.write("\n")
 
         inputFile.seek(0)
         commentFlag = False
@@ -171,16 +170,16 @@ def main():
                 if char.isspace():
                     continue
                 output.append(["INVALID TOKEN", char])
-            
-        outputFile.write("{:<{width}}{}\n\n".format("TOKENS", "LEXEMES", width=30))
+        
+        tokens = []
+        lexemes = []
+        index = 0
         
         for entry in output:
-            outputFile.write("{:<{width}}{}\n".format(entry[0], entry[1], width=30))
+            tokens.append(entry[0])
+            lexemes.append(entry[1])
         
-        # TODO: output
-        # rat24s()
-
-        print("Source code and tokens have succesfully been written to the output file.")
+        rat24s(tokens, lexemes, index)
 
 if __name__ == "__main__":
     main()

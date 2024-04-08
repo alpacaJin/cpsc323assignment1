@@ -1,0 +1,21 @@
+$
+function function1 (num1 integer, num2 integer)
+{
+    sum = num1 + num2;
+    return sum;
+}
+$
+    integer low, high, num3;
+$
+    num3 = 5;
+    num4 = function1(low, high);
+
+    if (num3 == num4)
+    {
+        print(num3);
+    } else 
+    {
+        print(num4);
+    }
+    endif
+$
