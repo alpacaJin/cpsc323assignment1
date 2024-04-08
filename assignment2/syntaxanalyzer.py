@@ -1,7 +1,7 @@
 import time
 
-# turn on printing
-switch = True
+# turn on/off printing
+switch = False
 output = []
 
 # prints to output file and increments tokens
@@ -11,7 +11,7 @@ def lexer_incrementor(tokens, lexemes, index):
         if switch:
             print()
             print("{:<{width}}{}".format("Token: " + tokens[index], "Lexeme: " + lexemes[index], width=30))
-        output.append("\n")
+        output.append("")
         output.append("{:<{width}}{}".format(f"TOKEN: {tokens[index]}", f"LEXEME: {lexemes[index]}", width=20))
         index += 1
         print("NEW INDEX: ", index, lexemes[index], tokens[index])
@@ -207,14 +207,12 @@ def qualifier(tokens, lexemes, index):
 
 def body(tokens, lexemes, index):
     # R11. <Body>  ::=  {  < Statement List>  }
-    print("current lexeme in body: ", lexemes[index])
     if lexemes[index] == "{":
         index = lexer_incrementor(tokens, lexemes, index)
         if switch:
             print("<Body> -> { <Statement List> }")
         output.append("<Body> -> { <Statement List> }")
         index = statement_list(tokens, lexemes, index)
-        print("finished statement list in body")
         if lexemes[index] == "}":
             index = lexer_incrementor(tokens, lexemes, index)
         else:
@@ -619,11 +617,11 @@ def relop(tokens, lexemes, index):
     return index
 
 def expression(tokens, lexemes, index):
-    # R32. <Expression> ::= <Term><ExpressionPrime>
+    # R32. <Expression> ::= <Term><Expression Prime>
     index = lexer_incrementor(tokens, lexemes, index)
     if switch:
-        print("<Expression> -> <Term><ExpressionPrime>")
-    output.append("<Expression> -> <Term><ExpressionPrime>")
+        print("<Expression> -> <Term><Expression Prime>")
+    output.append("<Expression> -> <Term><Expression Prime>")
     index = term(tokens, lexemes, index)
     index = expression_prime(tokens, lexemes, index)
     return index
@@ -634,8 +632,8 @@ def expression_prime(tokens, lexemes, index):
     # term prime causes index-1
     if lexemes[index-1] == "+" or lexemes[index-1] == "-":
         if switch:
-            print("<Expression Prime> -> ", lexemes[index-1], " <Term><ExpressionPrime>")
-        output.append("<Expression Prime> -> " + lexemes[index-1] + " <Term><ExpressionPrime>")
+            print("<Expression Prime> -> ", lexemes[index-1], " <Term><Expression Prime>")
+        output.append("<Expression Prime> -> " + lexemes[index-1] + " <Term><Expression Prime>")
         index = lexer_incrementor(tokens, lexemes, index)
         index = term(tokens, lexemes, index)
         index = expression_prime(tokens, lexemes, index)
@@ -646,10 +644,10 @@ def expression_prime(tokens, lexemes, index):
     return index
 
 def term(tokens, lexemes, index):
-    # R34. <Term> ::= <Factor><TermPrime>
+    # R34. <Term> ::= <Factor><Term Prime>
     if switch:
-        print("<Term> -> <Factor><TermPrime>")
-    output.append("<Term> -> <Factor><TermPrime>")
+        print("<Term> -> <Factor><Term Prime>")
+    output.append("<Term> -> <Factor><Term Prime>")
     index = factor(tokens, lexemes, index)
     index = term_prime(tokens, lexemes, index)
     return index
