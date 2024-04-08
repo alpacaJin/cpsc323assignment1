@@ -13,6 +13,7 @@ $
     scan (area1, area2);
     while (area2 > area1)
     {
+        area2greater = true;
         length = length + 2;
         width = width + 2;
 

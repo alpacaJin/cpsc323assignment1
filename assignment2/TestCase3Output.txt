@@ -1,7 +1,7 @@
 
 TOKEN: SEPARATOR    LEXEME: $
 <Rat24S> -> $ <Opt Function Definitions>
-<Opt Function Definitions> -> <Function Definitions> | <Empty>
+<Opt Function Definitions> -> <Function Definitions>
 <Function Definitions> -> <Function><Function Definitions Prime>
 
 TOKEN: KEYWORD      LEXEME: function
@@ -208,6 +208,24 @@ TOKEN: SEPARATOR    LEXEME: )
 TOKEN: SEPARATOR    LEXEME: {
 <Statement> -> <Compound>
 <Compound> -> { <Statement List> }
+<Statement List> -> <Statement> <Statement List Prime>
+
+TOKEN: IDENTIFIER   LEXEME: area2greater
+<Statement> -> <Assign>
+Assign -> <Identifier> = <Expression> ;
+
+TOKEN: OPERATOR     LEXEME: =
+
+TOKEN: KEYWORD      LEXEME: true
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> true
+
+TOKEN: SEPARATOR    LEXEME: ;
+<Term Prime> -> e
+<Expression Prime> -> e
+<Statement List Prime> -> <Statement List>
 <Statement List> -> <Statement> <Statement List Prime>
 
 TOKEN: IDENTIFIER   LEXEME: length
