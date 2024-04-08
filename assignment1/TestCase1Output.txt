@@ -6,9 +6,9 @@ function add (num1 integer, num2 integer)
 
 {
 
-    sum = num1+num2
+    sum = num1+num2;
 
-    return sum - 3n
+    return sum - 3n;
 
 }
 
@@ -16,7 +16,7 @@ function add (num1 integer, num2 integer)
 
 $
 
-    print(sum)
+    print(sum);
 
 $
 
@@ -38,14 +38,17 @@ OPERATOR                      =
 IDENTIFIER                    num1
 OPERATOR                      +
 IDENTIFIER                    num2
+SEPARATOR                     ;
 KEYWORD                       return
 IDENTIFIER                    sum
 OPERATOR                      -
 INVALID TOKEN                 3n
+SEPARATOR                     ;
 SEPARATOR                     }
 SEPARATOR                     $
 KEYWORD                       print
 SEPARATOR                     (
 IDENTIFIER                    sum
 SEPARATOR                     )
+SEPARATOR                     ;
 SEPARATOR                     $
