@@ -44,6 +44,7 @@ TOKEN: INTEGER      LEXEME: 5
 TOKEN: OPERATOR     LEXEME: *
 <Term Prime> -> * <Factor><Term Prime>
 <Factor> -> <Primary>
+called
 
 TOKEN: SEPARATOR    LEXEME: (
 <Primary> -> ( <Expression> )
@@ -99,6 +100,30 @@ TOKEN: SEPARATOR    LEXEME: ,
 <IDs Prime> -> , <IDs Prime>
 
 TOKEN: IDENTIFIER   LEXEME: step
+<IDs> -> <Identifier><IDs Prime>
+<IDs Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: ;
+<Declaration List Prime> -> <Declaration List>
+<Declaration List> -> <Declaration> ;<Declaration List Prime>
+<Declaration> -> <Qualifier> <IDs>
+
+TOKEN: KEYWORD      LEXEME: boolean
+<Qualifier> -> boolean
+
+TOKEN: IDENTIFIER   LEXEME: test1
+<IDs> -> <Identifier><IDs Prime>
+
+TOKEN: SEPARATOR    LEXEME: ,
+<IDs Prime> -> , <IDs Prime>
+
+TOKEN: IDENTIFIER   LEXEME: test2
+<IDs> -> <Identifier><IDs Prime>
+
+TOKEN: SEPARATOR    LEXEME: ,
+<IDs Prime> -> , <IDs Prime>
+
+TOKEN: IDENTIFIER   LEXEME: test3
 <IDs> -> <Identifier><IDs Prime>
 <IDs Prime> -> e
 
@@ -244,6 +269,280 @@ TOKEN: IDENTIFIER   LEXEME: step
 <Factor> -> <Primary>
 <Primary> -> <Identifier> <Primary Prime>
 <Primary Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: ;
+<Term Prime> -> e
+<Expression Prime> -> e
+<Statement List Prime> -> <Statement List>
+<Statement List> -> <Statement> <Statement List Prime>
+
+TOKEN: IDENTIFIER   LEXEME: test
+<Statement> -> <Assign>
+Assign -> <Identifier> = <Expression> ;
+
+TOKEN: OPERATOR     LEXEME: =
+
+TOKEN: SEPARATOR    LEXEME: (
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> ( <Expression> )
+
+TOKEN: IDENTIFIER   LEXEME: low
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Identifier> <Primary Prime>
+<Primary Prime> -> e
+
+TOKEN: OPERATOR     LEXEME: +
+<Term Prime> -> e
+<Expression Prime> -> + <Term><Expression Prime>
+
+TOKEN: SEPARATOR    LEXEME: (
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> ( <Expression> )
+
+TOKEN: IDENTIFIER   LEXEME: high
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Identifier> <Primary Prime>
+<Primary Prime> -> e
+
+TOKEN: OPERATOR     LEXEME: +
+<Term Prime> -> e
+<Expression Prime> -> + <Term><Expression Prime>
+
+TOKEN: IDENTIFIER   LEXEME: low
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Identifier> <Primary Prime>
+<Primary Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: )
+<Term Prime> -> e
+<Expression Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: )
+<Term Prime> -> e
+<Expression Prime> -> e
+
+TOKEN: OPERATOR     LEXEME: +
+<Term Prime> -> e
+<Expression Prime> -> + <Term><Expression Prime>
+
+TOKEN: INTEGER      LEXEME: 6
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Integer>
+
+TOKEN: OPERATOR     LEXEME: /
+<Term Prime> -> / <Factor><Term Prime>
+<Factor> -> <Primary>
+called
+
+TOKEN: SEPARATOR    LEXEME: (
+<Primary> -> ( <Expression> )
+
+TOKEN: INTEGER      LEXEME: 2
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Integer>
+
+TOKEN: OPERATOR     LEXEME: +
+<Term Prime> -> e
+<Expression Prime> -> + <Term><Expression Prime>
+
+TOKEN: INTEGER      LEXEME: 5
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Integer>
+
+TOKEN: SEPARATOR    LEXEME: )
+<Term Prime> -> e
+<Expression Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: ;
+<Term Prime> -> e
+<Expression Prime> -> e
+<Statement List Prime> -> <Statement List>
+<Statement List> -> <Statement> <Statement List Prime>
+
+TOKEN: IDENTIFIER   LEXEME: test2
+<Statement> -> <Assign>
+Assign -> <Identifier> = <Expression> ;
+
+TOKEN: OPERATOR     LEXEME: =
+
+TOKEN: SEPARATOR    LEXEME: (
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> ( <Expression> )
+
+TOKEN: SEPARATOR    LEXEME: (
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> ( <Expression> )
+
+TOKEN: SEPARATOR    LEXEME: (
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> ( <Expression> )
+
+TOKEN: IDENTIFIER   LEXEME: high
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Identifier> <Primary Prime>
+<Primary Prime> -> e
+
+TOKEN: OPERATOR     LEXEME: +
+<Term Prime> -> e
+<Expression Prime> -> + <Term><Expression Prime>
+
+TOKEN: IDENTIFIER   LEXEME: low
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Identifier> <Primary Prime>
+<Primary Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: )
+<Term Prime> -> e
+<Expression Prime> -> e
+
+TOKEN: OPERATOR     LEXEME: +
+<Term Prime> -> e
+<Expression Prime> -> + <Term><Expression Prime>
+
+TOKEN: IDENTIFIER   LEXEME: high
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Identifier> <Primary Prime>
+<Primary Prime> -> e
+
+TOKEN: OPERATOR     LEXEME: +
+<Term Prime> -> e
+<Expression Prime> -> + <Term><Expression Prime>
+
+TOKEN: IDENTIFIER   LEXEME: low
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Identifier> <Primary Prime>
+<Primary Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: )
+<Term Prime> -> e
+<Expression Prime> -> e
+
+TOKEN: OPERATOR     LEXEME: *
+<Term Prime> -> * <Factor><Term Prime>
+<Factor> -> <Primary>
+
+TOKEN: IDENTIFIER   LEXEME: low
+<Primary> -> <Identifier> <Primary Prime>
+<Primary Prime> -> e
+
+TOKEN: SEPARATOR    LEXEME: )
+<Term Prime> -> e
+<Expression Prime> -> e
+
+TOKEN: OPERATOR     LEXEME: +
+<Term Prime> -> e
+<Expression Prime> -> + <Term><Expression Prime>
+
+TOKEN: INTEGER      LEXEME: 6
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Integer>
+
+TOKEN: OPERATOR     LEXEME: /
+<Term Prime> -> / <Factor><Term Prime>
+<Factor> -> <Primary>
+called
+
+TOKEN: SEPARATOR    LEXEME: (
+<Primary> -> ( <Expression> )
+
+TOKEN: SEPARATOR    LEXEME: (
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> ( <Expression> )
+
+TOKEN: SEPARATOR    LEXEME: (
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> ( <Expression> )
+
+TOKEN: INTEGER      LEXEME: 5
+<Expression> -> <Term><Expression Prime>
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Integer>
+
+TOKEN: OPERATOR     LEXEME: +
+<Term Prime> -> e
+<Expression Prime> -> + <Term><Expression Prime>
+
+TOKEN: INTEGER      LEXEME: 6
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Integer>
+
+TOKEN: SEPARATOR    LEXEME: )
+<Term Prime> -> e
+<Expression Prime> -> e
+
+TOKEN: OPERATOR     LEXEME: +
+<Term Prime> -> e
+<Expression Prime> -> + <Term><Expression Prime>
+
+TOKEN: INTEGER      LEXEME: 6
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Integer>
+
+TOKEN: OPERATOR     LEXEME: +
+<Term Prime> -> e
+<Expression Prime> -> + <Term><Expression Prime>
+
+TOKEN: INTEGER      LEXEME: 7
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Integer>
+
+TOKEN: SEPARATOR    LEXEME: )
+<Term Prime> -> e
+<Expression Prime> -> e
+
+TOKEN: OPERATOR     LEXEME: +
+<Term Prime> -> e
+<Expression Prime> -> + <Term><Expression Prime>
+
+TOKEN: INTEGER      LEXEME: 2
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Integer>
+
+TOKEN: OPERATOR     LEXEME: +
+<Term Prime> -> e
+<Expression Prime> -> + <Term><Expression Prime>
+
+TOKEN: INTEGER      LEXEME: 5
+<Term> -> <Factor><Term Prime>
+<Factor> -> <Primary>
+<Primary> -> <Integer>
+
+TOKEN: SEPARATOR    LEXEME: )
+<Term Prime> -> e
+<Expression Prime> -> e
 
 TOKEN: SEPARATOR    LEXEME: ;
 <Term Prime> -> e

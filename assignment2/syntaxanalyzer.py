@@ -690,11 +690,10 @@ def term_prime(tokens, lexemes, index):
         if switch:
             print("<Term Prime> -> ", lexemes[index-1], " <Factor><Term Prime>")
         output.append("<Term Prime> -> " + lexemes[index-1] + " <Factor><Term Prime>")
-        # # added this because of test case 1 for multiplication
-        # index = lexer_incrementor(tokens, lexemes, index)
         index = factor(tokens, lexemes, index)
         index = term_prime(tokens, lexemes, index)
     else:
+        # this printed 9
         index = lexer_incrementor(tokens, lexemes, index)
         if switch:
             print("<Term Prime> -> e")
@@ -719,8 +718,10 @@ def factor(tokens, lexemes, index):
 
 def primary(tokens, lexemes, index):
     # R37. <Primary> ::= <Identifier> <Primary Prime>  |  <Integer>  |  ( <Expression> )  |  <Real>  |  true  |  false
-    # expression causes index-1
-    if tokens[index-1] == "IDENTIFIER" or tokens[index] == "IDENTIFIER":
+    # expression causes index-1 and term prime -> e causes index-1
+    # used to understand logic: if tokens[index] in ["IDENTIFIER", "INTEGER", "REAL"] and lexemes[index-1] == "(":
+    #     print("invalid(actual index, index-1,index): ",index, lexemes[index-1], lexemes[index])
+    if tokens[index-1] == "IDENTIFIER" or (tokens[index] == "IDENTIFIER" and lexemes[index-1] != "("):
         # for regulars
         if tokens[index] == "IDENTIFIER":
             index = lexer_incrementor(tokens, lexemes, index)
@@ -728,30 +729,32 @@ def primary(tokens, lexemes, index):
             print("<Primary> -> <Identifier> <Primary Prime>")
         output.append("<Primary> -> <Identifier> <Primary Prime>")
         index = primary_prime(tokens, lexemes, index)
-    elif tokens[index-1] == "INTEGER" or tokens[index] == "INTEGER":
+    elif tokens[index-1] == "INTEGER" or (tokens[index] == "INTEGER" and lexemes[index-1] != "("):
         if tokens[index] == "INTEGER":
             index = lexer_incrementor(tokens, lexemes, index)
         if switch:
             print("<Primary> -> <Integer>")
         output.append("<Primary> -> <Integer>")
-    elif tokens[index-1] == "REAL" or tokens[index] == "REAL":
+    elif tokens[index-1] == "REAL" or (tokens[index] == "REAL" and lexemes[index-1] != "("):
         if tokens[index] == "REAL":
             index = lexer_incrementor(tokens, lexemes, index)
         if switch:
             print("<Primary> -> <Real>")
         output.append("<Primary> -> <Real>")
-    elif lexemes[index-1] in ["true","false"] or lexemes[index] in ["true", "false"]:
+    elif lexemes[index-1] in ["true","false"] or (lexemes[index] in ["true", "false"] and lexemes[index-1] != "("):
         if lexemes[index] in ["true", "false"]:
             index = lexer_incrementor(tokens, lexemes, index)
-            if switch:
-                print("<Primary> -> ", lexemes[index-1])
-            output.append("<Primary> -> " + lexemes[index-1])
-        else:
-            if switch:
-                print("<Primary> -> ", lexemes[index-1])
-            output.append("<Primary> -> " + lexemes[index-1])
-    elif lexemes[index] == "(": 
-        index = lexer_incrementor(tokens, lexemes, index)
+        if switch:
+            print("<Primary> -> ", lexemes[index-1])
+        output.append("<Primary> -> " + lexemes[index-1])
+    # TODO: fix this omg, does not do well with test = (low + (high - low))/2;
+    # tried matching indexes to above, did not work
+    # tried moving it up
+    # tried doing index = index + 1 trick
+    # think I fixed it! maybe figure out the logic for the conditional for this later...
+    elif lexemes[index-1] == "(" or lexemes[index] == "(": 
+        if lexemes[index] == "(" and lexemes[index-1] != "(":
+            index = lexer_incrementor(tokens, lexemes, index)
         if switch:
             print("<Primary> -> ( <Expression> )")
         output.append("<Primary> -> ( <Expression> )")

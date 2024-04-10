@@ -17,6 +17,8 @@ $
         print (low);
         print (convertx (low));
         low = low + step;
+        test = (low + (high + low)) + 6 /(2+5);
+        test2 = (((high+low)+high + low)*low) + 6 /(((5+6)+6+7)+2+5);
         }
     endwhile
 $
