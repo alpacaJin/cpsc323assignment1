@@ -60,13 +60,14 @@ def rat24s(tokens, lexemes, index):
             print("Error: expected $")
         output.append("Error: expected $")
 
-    outputFileName = input("Enter the desired output file name (with .txt at the end): ")
+    # outputFileName = input("Enter the desired output file name (with .txt at the end): ")
 
-    with open(outputFileName, 'w') as outputFile:
-        for line in output:
-            outputFile.write(str(line) + "\n")
+    # with open(outputFileName, 'w') as outputFile:
+    #     for line in output:
+    #         outputFile.write(str(line) + "\n")
 
     print("Tokens and lexemes productions have succesfully been written to the output file.")
+    return True
 
 def opt_function_definitions(tokens, lexemes, index):
     # R2. <Opt Function Definitions> ::= <Function Definitions>     |  <Empty>
