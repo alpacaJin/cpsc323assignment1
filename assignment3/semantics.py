@@ -74,6 +74,8 @@ def start(tokens, lexemes):
                 generateInstruction("POPM", getAddress(savedID))
         elif lexemes[assemblyIndex] == "while":
             whileStatement(tokens, lexemes)
+        elif lexemes[assemblyIndex] == "if":
+            ifStatement(tokens, lexemes)
         else:
             assemblyIndex += 1
 
@@ -182,4 +184,34 @@ def backPatch(jumpAddr):
     addr = jumpStack.pop()
     instructionTable[addr][2] = jumpAddr
 
+def ifStatement(tokens, lexemes):
+    global assemblyIndex
+    assemblyIndex += 1
+    if lexemes[assemblyIndex] == "(":
+        assemblyIndex += 1
+        C(tokens, lexemes)
+        if lexemes[assemblyIndex] == ")":
+            assemblyIndex += 1
+            S(tokens, lexemes)
+            backPatch(instructionTableIndex)
+            if lexemes[assemblyIndex] == "endif":
+                assemblyIndex += 1
+            else:
+                print("ERROR: endif expected")
 
+# This wasn't a part of the partial solutions so might need to redo this lol
+def S(tokens, lexemes):
+    global assemblyIndex
+    # Simplified S function to handle statements inside the while loop
+    while assemblyIndex < len(tokens) and lexemes[assemblyIndex] != "endwhile":
+        if tokens[assemblyIndex] == "IDENTIFIER":
+            savedID = lexemes[assemblyIndex]
+            assemblyIndex += 1
+            if lexemes[assemblyIndex] == "=":
+                assemblyIndex += 1
+                E(tokens, lexemes)
+                generateInstruction("POPM", getAddress(savedID))
+        elif lexemes[assemblyIndex] == "while":
+            whileStatement(tokens, lexemes)
+        else:
+            assemblyIndex += 1
