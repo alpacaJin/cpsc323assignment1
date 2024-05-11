@@ -6,11 +6,17 @@ $
 $
     sum = 0;
     i = 1;
-    scan (max);
     while (i < max) {
         sum = sum + i;
         i = i + 1;
     }
     endwhile
-    print (sum + max);
+
+    if (i > max) {
+        sum = i
+        i = i + 1
+    } 
+    endif
+
+    print(sum)
 $

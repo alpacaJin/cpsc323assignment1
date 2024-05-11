@@ -41,13 +41,13 @@ def semantics(tokens, lexemes):
     for entry in instructionTable:
         print(entry)
 
-    # print("Symbol Table")
-    # print("Identifier\tMemory Address\tType")
-    # for k in symbolTable:
-    #     print(f"{k[0]}\t\t{k[1]}\t\t{k[2]}")
+    print("Symbol Table")
+    print("Identifier\tMemory Address\tType")
+    for k in symbolTable:
+        print(f"{k[0]}\t\t{k[1]}\t\t{k[2]}")
 
-    # for k in range(0, len(tokens)):
-    #     print(f"{tokens[k]}: {lexemes[k]}")
+    for k in range(0, len(tokens)):
+        print(f"{tokens[k]}: {lexemes[k]}")
 
 def start(tokens, lexemes):
     global assemblyIndex
@@ -59,60 +59,21 @@ def start(tokens, lexemes):
         while (lexemes[assemblyIndex] == "$"):
             assemblyIndex += 1
 
-        # Handles declaration portion of programs
+        # Handles/skips declaration portion of programs
         if lexemes[assemblyIndex] == "integer":
             while lexemes[assemblyIndex] != ";":
                 assemblyIndex += 1
-
             assemblyIndex += 1
         elif tokens[assemblyIndex] == "IDENTIFIER":
-            savedID = lexemes[assemblyIndex] # Maybe put this in an assignment function?
-            assemblyIndex += 1
-            if lexemes[assemblyIndex] == "=":
-                assemblyIndex += 1
-                E(tokens, lexemes)
-                generateInstruction("POPM", getAddress(savedID))
+            assignment(tokens, lexemes)
         elif lexemes[assemblyIndex] == "while":
             whileStatement(tokens, lexemes)
         elif lexemes[assemblyIndex] == "if":
             ifStatement(tokens, lexemes)
+        elif lexemes[assemblyIndex] == "print":
+            printStatement(tokens, lexemes)
         else:
             assemblyIndex += 1
-
-def E(tokens, lexemes):
-    global assemblyIndex
-    T(tokens, lexemes)
-    EPrime(tokens, lexemes)
-
-def EPrime(tokens, lexemes):
-    global assemblyIndex
-    if lexemes[assemblyIndex] == "+":
-        assemblyIndex += 1
-        T(tokens, lexemes)
-        generateInstruction("A", "nil")
-        EPrime(tokens, lexemes)
-
-def T(tokens, lexemes):
-    global assemblyIndex
-    F(tokens, lexemes)
-    TPrime(tokens, lexemes)
-
-def TPrime(tokens, lexemes):
-    global assemblyIndex
-    if lexemes[assemblyIndex] == "*":
-        assemblyIndex += 1
-        F(tokens, lexemes)
-        generateInstruction("M", "nil")
-        TPrime(tokens, lexemes)
-
-def F(tokens, lexemes):
-    global assemblyIndex
-    if tokens[assemblyIndex] == "INTEGER":
-        generateInstruction("PUSHI", lexemes[assemblyIndex])
-        assemblyIndex += 1
-    else:
-        print("CURRENT LEXEME: ", lexemes[assemblyIndex])
-        print("ERROR: ID expected")
 
 def generateInstruction(op, oprnd):
     global instructionTableIndex, instructionTable
@@ -125,6 +86,22 @@ def getAddress(id):
         if entry[0] == id:
             return entry[1]
     return -1
+
+def backPatch(jumpAddr):
+    global instructionTable, jumpStack
+    addr = jumpStack.pop()
+    instructionTable[addr][2] = jumpAddr
+
+def assignment(tokens, lexemes):
+    global assemblyIndex
+    savedID = lexemes[assemblyIndex] # Maybe put this in an assignment function?
+    assemblyIndex += 1
+    if lexemes[assemblyIndex] == "=":
+        assemblyIndex += 1
+        E(tokens, lexemes)
+        generateInstruction("POPM", getAddress(savedID))
+    else:
+        print("ERROR: = expected")
 
 def whileStatement(tokens, lexemes):
     global assemblyIndex, instructionTableIndex
@@ -139,11 +116,106 @@ def whileStatement(tokens, lexemes):
             S(tokens, lexemes)
             generateInstruction("JUMP", instructAddr)
             backPatch(instructionTableIndex)
-            assemblyIndex += 1
+            # assemblyIndex += 1
             if lexemes[assemblyIndex] == "endwhile":
                 assemblyIndex += 1
             else:
                 print("ERROR: endwhile expected")
+        else:
+            print("ERROR: ) expected")
+    else:
+        print("ERROR: ( expected")
+
+def ifStatement(tokens, lexemes):
+    global assemblyIndex
+    assemblyIndex += 1
+    if lexemes[assemblyIndex] == "(":
+        assemblyIndex += 1
+        C(tokens, lexemes)
+        if lexemes[assemblyIndex] == ")":
+            assemblyIndex += 1
+            S(tokens, lexemes)
+            backPatch(instructionTableIndex)
+            if lexemes[assemblyIndex] == "endif":
+                assemblyIndex += 1
+            else:
+                print("ERROR: endif expected")
+
+def printStatement(tokens, lexemes):
+    global assemblyIndex
+    assemblyIndex += 1
+    if lexemes[assemblyIndex] == "(":
+        assemblyIndex += 1
+        while (lexemes[assemblyIndex] != ")"):
+            if tokens[assemblyIndex] == "IDENTIFIER":
+                generateInstruction("PUSHM", getAddress(lexemes[assemblyIndex]))
+                generateInstruction("SOUT", "")
+            elif tokens[assemblyIndex] == "INTEGER":
+                generateInstruction("PUSHI", lexemes[assemblyIndex])
+                generateInstruction("SOUT", "")
+            elif lexemes[assemblyIndex] == "true" or lexemes[assemblyIndex] == "false":
+                if lexemes[assemblyIndex] == "true":
+                    generateInstruction("PUSHI", 1)
+                    generateInstruction("SOUT", "")
+                else:
+                    generateInstruction("PUSHI", 0)
+                    generateInstruction("SOUT", "")
+            else:
+                print("ERROR: ) expected")
+
+            assemblyIndex += 1
+    else:
+        print("ERROR: ( expected")
+
+def E(tokens, lexemes):
+    global assemblyIndex
+    T(tokens, lexemes)
+    EPrime(tokens, lexemes)
+
+def EPrime(tokens, lexemes):
+    global assemblyIndex
+    if lexemes[assemblyIndex] == "+":
+        assemblyIndex += 1
+        T(tokens, lexemes)
+        generateInstruction("A", "nil")
+        EPrime(tokens, lexemes)
+    elif lexemes[assemblyIndex] == "-":
+        assemblyIndex += 1
+        T(tokens, lexemes)
+        generateInstruction("S", "nil")
+        EPrime(tokens, lexemes)
+
+def T(tokens, lexemes):
+    global assemblyIndex
+    F(tokens, lexemes)
+    TPrime(tokens, lexemes)
+
+def TPrime(tokens, lexemes):
+    global assemblyIndex
+    if lexemes[assemblyIndex] == "*":
+        assemblyIndex += 1
+        F(tokens, lexemes)
+        generateInstruction("M", "nil")
+        TPrime(tokens, lexemes)
+    elif lexemes[assemblyIndex] == "/":
+        assemblyIndex += 1
+        F(tokens, lexemes)
+        generateInstruction("D", "nil")
+        TPrime(tokens, lexemes)
+
+def F(tokens, lexemes):
+    global assemblyIndex
+    # if tokens[assemblyIndex] == "INTEGER" or tokens[assemblyIndex] == "IDENTIFIER":
+    #     generateInstruction("PUSHI", lexemes[assemblyIndex])
+    #     assemblyIndex += 1
+    if lexemes[assemblyIndex].isnumeric():
+        generateInstruction("PUSHI", lexemes[assemblyIndex])
+        assemblyIndex += 1
+    elif lexemes[assemblyIndex].isnumeric() == False:
+        generateInstruction("PUSHM", getAddress(lexemes[assemblyIndex]))
+        assemblyIndex += 1
+    else:
+        print("ERROR: ID expected")
 
 def C(tokens, lexemes):
     global assemblyIndex, instructionTableIndex
@@ -179,39 +251,20 @@ def C(tokens, lexemes):
         else:
             print("ERROR: Relational operator expected")
 
-def backPatch(jumpAddr):
-    global instructionTable, jumpStack
-    addr = jumpStack.pop()
-    instructionTable[addr][2] = jumpAddr
-
-def ifStatement(tokens, lexemes):
-    global assemblyIndex
-    assemblyIndex += 1
-    if lexemes[assemblyIndex] == "(":
-        assemblyIndex += 1
-        C(tokens, lexemes)
-        if lexemes[assemblyIndex] == ")":
-            assemblyIndex += 1
-            S(tokens, lexemes)
-            backPatch(instructionTableIndex)
-            if lexemes[assemblyIndex] == "endif":
-                assemblyIndex += 1
-            else:
-                print("ERROR: endif expected")
-
 # This wasn't a part of the partial solutions so might need to redo this lol
 def S(tokens, lexemes):
     global assemblyIndex
-    # Simplified S function to handle statements inside the while loop
-    while assemblyIndex < len(tokens) and lexemes[assemblyIndex] != "endwhile":
+    # Process statements until a matching end keyword is found
+    while assemblyIndex < len(tokens):
         if tokens[assemblyIndex] == "IDENTIFIER":
-            savedID = lexemes[assemblyIndex]
-            assemblyIndex += 1
-            if lexemes[assemblyIndex] == "=":
-                assemblyIndex += 1
-                E(tokens, lexemes)
-                generateInstruction("POPM", getAddress(savedID))
+            assignment(tokens, lexemes)
         elif lexemes[assemblyIndex] == "while":
             whileStatement(tokens, lexemes)
+        elif lexemes[assemblyIndex] == "if":
+            ifStatement(tokens, lexemes)
+        elif lexemes[assemblyIndex] == "print":
+            printStatement(tokens, lexemes)
+        elif lexemes[assemblyIndex] in ["endwhile", "endif"]:
+            break
         else:
             assemblyIndex += 1
