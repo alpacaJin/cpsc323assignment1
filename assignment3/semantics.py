@@ -150,22 +150,16 @@ def printStatement(tokens, lexemes):
         assemblyIndex += 1
         while (lexemes[assemblyIndex] != ")"):
             if tokens[assemblyIndex] == "IDENTIFIER":
-                generateInstruction("PUSHM", getAddress(lexemes[assemblyIndex]))
+                E(tokens, lexemes)
                 generateInstruction("SOUT", "")
             elif tokens[assemblyIndex] == "INTEGER":
-                generateInstruction("PUSHI", lexemes[assemblyIndex])
+                E(tokens, lexemes)
                 generateInstruction("SOUT", "")
             elif lexemes[assemblyIndex] == "true" or lexemes[assemblyIndex] == "false":
-                if lexemes[assemblyIndex] == "true":
-                    generateInstruction("PUSHI", 1)
-                    generateInstruction("SOUT", "")
-                else:
-                    generateInstruction("PUSHI", 0)
-                    generateInstruction("SOUT", "")
+                E(tokens, lexemes)
+                generateInstruction("SOUT", "")
             else:
                 print("ERROR: ) expected")
-
-            assemblyIndex += 1
     else:
         print("ERROR: ( expected")
 
@@ -174,9 +168,9 @@ def scanStatement(tokens, lexemes):
     assemblyIndex += 1
     if lexemes[assemblyIndex] == "(":
         assemblyIndex += 1
+        generateInstruction("SIN", "")
         while (lexemes[assemblyIndex] != ")"):
             if tokens[assemblyIndex] == "IDENTIFIER":
-                generateInstruction("SIN", "")
                 generateInstruction("POPM", getAddress(lexemes[assemblyIndex]))
             else:
                 print("ERROR: ) expected")
@@ -231,6 +225,12 @@ def F(tokens, lexemes):
         assemblyIndex += 1
     elif lexemes[assemblyIndex].isnumeric() == False:
         generateInstruction("PUSHM", getAddress(lexemes[assemblyIndex]))
+        assemblyIndex += 1
+    elif lexemes[assemblyIndex] == "true":
+        generateInstruction("PUSHI", "1")
+        assemblyIndex += 1
+    elif lexemes[assemblyIndex] == "false":
+        generateInstruction("PUSHI", "0")
         assemblyIndex += 1
     else:
         print("ERROR: ID expected")
