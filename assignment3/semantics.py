@@ -72,6 +72,8 @@ def start(tokens, lexemes):
             ifStatement(tokens, lexemes)
         elif lexemes[assemblyIndex] == "print":
             printStatement(tokens, lexemes)
+        elif lexemes[assemblyIndex] == "scan":
+            scanStatement(tokens, lexemes)
         else:
             assemblyIndex += 1
 
@@ -167,6 +169,22 @@ def printStatement(tokens, lexemes):
     else:
         print("ERROR: ( expected")
 
+def scanStatement(tokens, lexemes):
+    global assemblyIndex
+    assemblyIndex += 1
+    if lexemes[assemblyIndex] == "(":
+        assemblyIndex += 1
+        while (lexemes[assemblyIndex] != ")"):
+            if tokens[assemblyIndex] == "IDENTIFIER":
+                generateInstruction("SIN", "")
+                generateInstruction("POPM", getAddress(lexemes[assemblyIndex]))
+            else:
+                print("ERROR: ) expected")
+
+            assemblyIndex += 1
+    else:
+        print("ERROR: ( expected")
+
 def E(tokens, lexemes):
     global assemblyIndex
     T(tokens, lexemes)
@@ -251,10 +269,10 @@ def C(tokens, lexemes):
         else:
             print("ERROR: Relational operator expected")
 
-# This wasn't a part of the partial solutions so might need to redo this lol
+# <Compound> ?
 def S(tokens, lexemes):
     global assemblyIndex
-    # Process statements until a matching end keyword is found
+
     while assemblyIndex < len(tokens):
         if tokens[assemblyIndex] == "IDENTIFIER":
             assignment(tokens, lexemes)
@@ -264,6 +282,8 @@ def S(tokens, lexemes):
             ifStatement(tokens, lexemes)
         elif lexemes[assemblyIndex] == "print":
             printStatement(tokens, lexemes)
+        elif lexemes[assemblyIndex] == "scan":
+            scanStatement(tokens, lexemes)
         elif lexemes[assemblyIndex] in ["endwhile", "endif"]:
             break
         else:

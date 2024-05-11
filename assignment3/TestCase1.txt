@@ -18,5 +18,6 @@ $
     } 
     endif
 
-    print(sum)
+    print(sum);
+    scan(sum);
 $
