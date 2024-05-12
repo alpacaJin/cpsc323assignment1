@@ -4,6 +4,7 @@ instructionTableIndex = 1
 instructionTable = []
 symbolTable = []
 jumpStack = []
+output = []
 
 def semantics(tokens, lexemes):
     global memoryAddress, symbolTable, instructionTable
@@ -15,24 +16,25 @@ def semantics(tokens, lexemes):
         if tokens[index] == "IDENTIFIER":
             if lexemes[index] not in declaredIDs:
                 print(f"Error: {lexemes[index]} not declared")
-                break
+                index += 1
 
         # Declarations start with integer, so when this keyword is detected, enter a
         # while loop to look for identifiers and add them to the symbol table and declaredIDs
-        if lexemes[index] == "integer":
+        if lexemes[index] == "integer" or lexemes[index] == "boolean":
+            currentType = lexemes[index]
             index += 1
             while lexemes[index] != ";":
                 if tokens[index] == "SEPARATOR":
                     index += 1
                 elif tokens[index] == "IDENTIFIER":
                     if not any(entry[0] == lexemes[index] for entry in symbolTable):
-                        symbolTable.append([lexemes[index], memoryAddress, "integer"])
+                        symbolTable.append([lexemes[index], memoryAddress, currentType])
                         declaredIDs.add(lexemes[index])
                         memoryAddress += 1
                         index += 1
                     else: # Handles identifiers that are already declared
                         print(f"Error: {lexemes[index]} already declared")
-                        break
+                        index += 1
         else:
             index += 1
 
@@ -40,14 +42,74 @@ def semantics(tokens, lexemes):
 
     for entry in instructionTable:
         print(entry)
+        output.append(str(entry))
 
     print("Symbol Table")
+    output.append("Symbol Table")
     print("Identifier\tMemory Address\tType")
+    output.append("Identifier\tMemory Address\tType")
     for k in symbolTable:
         print(f"{k[0]}\t\t{k[1]}\t\t{k[2]}")
+        output.append(f"{k[0]}\t\t{k[1]}\t\t{k[2]}")
 
     for k in range(0, len(tokens)):
         print(f"{tokens[k]}: {lexemes[k]}")
+        output.append(f"{tokens[k]}: {lexemes[k]}")
+
+    outputFileName = input("Enter the desired output file name (with .txt at the end): ")
+
+    with open(outputFileName, 'w') as outputFile:
+        for line in output:
+            outputFile.write(str(line) + "\n")
+
+def type_match(tokens, lexemes):
+    global assemblyIndex
+
+    for entry in symbolTable:
+        print(entry)
+
+    while assemblyIndex < len(tokens):
+        print(lexemes[assemblyIndex])
+        print(lexemes[assemblyIndex-1] in symbolTable)
+        if lexemes[assemblyIndex] in ["!=", ">", "<", "<=", "=>", "+", "-", "*", "==", "/"]:
+            for entry in symbolTable:
+                if entry[0] == lexemes[assemblyIndex-1]:
+                    previousType = entry[2]
+                if entry[0] == lexemes[assemblyIndex+1]:
+                    nextType = entry[2]
+            if lexemes[assemblyIndex-1] in symbolTable and lexemes[assemblyIndex+1] in symbolTable:
+                if previousType != nextType:
+                    print("previousType != nextType called")
+                    print(f"Error: {lexemes[assemblyIndex-1]} and {lexemes[assemblyIndex+1]} do not match: {previousType}, {nextType}")
+                    continue
+                elif previousType == "boolean" and nextType == "boolean":
+                    print(f"Error: arithmetic operations not allowed for booleans: {lexemes[assemblyIndex-1]} and {lexemes[assemblyIndex+1]}, {lexemes[assemblyIndex]}")
+                    continue
+            if lexemes[assemblyIndex-1] in symbolTable:
+                if previousType != tokens[assemblyIndex+1]:
+                    print("previousType != tokens[assemblyIndex+1] called")
+                    print(f"Error: {lexemes[assemblyIndex-1]} and {lexemes[assemblyIndex+1]} do not match: {previousType}, {tokens[assemblyIndex+1]}")
+                    continue
+                elif previousType == "boolean" and tokens[assemblyIndex+1] == "boolean":
+                    print(f"Error: arithmetic operations not allowed for booleans: {lexemes[assemblyIndex-1]} and {lexemes[assemblyIndex+1]}, {lexemes[assemblyIndex]}")
+                    continue
+            elif lexemes[assemblyIndex+1] in symbolTable:
+                if tokens[assemblyIndex-1] != nextType:
+                    print("tokens[assemblyIndex-1] != nextType called")
+                    print(f"Error: {lexemes[assemblyIndex-1]} and {lexemes[assemblyIndex+1]} do not match: {tokens[assemblyIndex-1]}, {nextType}")
+                    continue
+                elif lexemes[assemblyIndex-1] == "boolean" and nextType == "boolean":
+                    print(f"Error: arithmetic operations not allowed for booleans: {lexemes[assemblyIndex-1]} and {lexemes[assemblyIndex+1]}, {lexemes[assemblyIndex]}")
+                    continue
+            if tokens[assemblyIndex-1] == "boolean" and tokens[assemblyIndex+1] == "boolean":
+                print("boolean called")
+                print(f"Error: arithmetic operations not allowed for booleans: {lexemes[assemblyIndex-1]} and {lexemes[assemblyIndex+1]}, {lexemes[assemblyIndex]}")
+                continue
+            # if tokens[assemblyIndex-1] != tokens[assemblyIndex+1]:
+            #     print("regular called")
+            #     print(f"Error: {lexemes[assemblyIndex-1]} and {lexemes[assemblyIndex+1]} do not match: {tokens[assemblyIndex-1]}, {tokens[assemblyIndex+1]}")
+            #     continue
+        assemblyIndex += 1
 
 def start(tokens, lexemes):
     global assemblyIndex
@@ -56,15 +118,17 @@ def start(tokens, lexemes):
         # print(f"{tokens[assemblyIndex]}: {lexemes[assemblyIndex]}")
         # print(assemblyIndex)
 
+        print("max" in symbolTable)
+
         while (lexemes[assemblyIndex] == "$"):
             assemblyIndex += 1
 
         # Handles/skips declaration portion of programs
-        if lexemes[assemblyIndex] == "integer":
+        if lexemes[assemblyIndex] == "integer" or lexemes[assemblyIndex] == "boolean":
             while lexemes[assemblyIndex] != ";":
                 assemblyIndex += 1
             assemblyIndex += 1
-        elif tokens[assemblyIndex] == "IDENTIFIER":
+        if tokens[assemblyIndex] == "IDENTIFIER":
             assignment(tokens, lexemes)
         elif lexemes[assemblyIndex] == "while":
             whileStatement(tokens, lexemes)
@@ -79,6 +143,7 @@ def start(tokens, lexemes):
 
 def generateInstruction(op, oprnd):
     global instructionTableIndex, instructionTable
+    print("op: ", op, " oprnd: ", oprnd)
     instructionTable.append([instructionTableIndex, op, oprnd])
     instructionTableIndex += 1
 
@@ -91,6 +156,9 @@ def getAddress(id):
 
 def backPatch(jumpAddr):
     global instructionTable, jumpStack
+    print("jumpstack")
+    for entry in jumpStack:
+        print(entry)
     addr = jumpStack.pop()
     instructionTable[addr][2] = jumpAddr
 
@@ -270,6 +338,8 @@ def C(tokens, lexemes):
             print("ERROR: Relational operator expected")
 
 # <Compound> ?
+
+# Statement
 def S(tokens, lexemes):
     global assemblyIndex
 

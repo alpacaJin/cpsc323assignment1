@@ -1,0 +1,83 @@
+Instruction Table
+[1, 'PUSHI', '0']
+[2, 'POPM', 5002]
+[3, 'PUSHI', '1']
+[4, 'POPM', 5000]
+[5, 'SIN', '']
+[6, 'POPM', 5001]
+[7, 'LABEL', 'nil']
+[8, 'PUSHM', 5000]
+[9, 'PUSHM', 5001]
+[10, 'LES', 'nil']
+[11, 'JUMP0', 'nil']
+[12, 'PUSHM', 21]
+[13, 'PUSHM', 5000]
+[14, 'A', 'nil']
+[15, 'POPM', 5002]
+[16, 'PUSHM', 5000]
+[17, 'PUSHI', '1']
+[18, 'A', 'nil']
+[19, 'POPM', 5000]
+[20, 'JUMP', 7]
+[21, 'PUSHM', 5002]
+[22, 'PUSHM', 5001]
+[23, 'A', 'nil']
+[24, 'SOUT', '']
+
+Symbol Table
+Identifier	Memory Address	Type
+i		5000		integer
+max		5001		integer
+sum		5002		integer
+
+SEPARATOR: $
+SEPARATOR: $
+KEYWORD: integer
+IDENTIFIER: i
+SEPARATOR: ,
+IDENTIFIER: max
+SEPARATOR: ,
+IDENTIFIER: sum
+SEPARATOR: ;
+SEPARATOR: $
+IDENTIFIER: sum
+OPERATOR: =
+INTEGER: 0
+SEPARATOR: ;
+IDENTIFIER: i
+OPERATOR: =
+INTEGER: 1
+SEPARATOR: ;
+KEYWORD: scan
+SEPARATOR: (
+IDENTIFIER: max
+SEPARATOR: )
+KEYWORD: while
+SEPARATOR: (
+IDENTIFIER: i
+OPERATOR: <
+IDENTIFIER: max
+SEPARATOR: )
+SEPARATOR: {
+IDENTIFIER: sum
+OPERATOR: =
+IDENTIFIER: sum
+OPERATOR: +
+IDENTIFIER: i
+SEPARATOR: ;
+IDENTIFIER: i
+OPERATOR: =
+IDENTIFIER: i
+OPERATOR: +
+INTEGER: 1
+SEPARATOR: ;
+SEPARATOR: }
+KEYWORD: endwhile
+KEYWORD: print
+SEPARATOR: (
+IDENTIFIER: sum
+OPERATOR: +
+IDENTIFIER: max
+SEPARATOR: )
+SEPARATOR: ;
+SEPARATOR: $

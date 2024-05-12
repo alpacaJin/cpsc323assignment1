@@ -1,7 +1,24 @@
-import time
+# from string import lower
+
+# Assignment 3, Simplified Rat24s: no R3 and R5 (no functions), and real
+# Statements:
+# Compound: don't need to do anything for it
+# Assign
+# Return: don't need to do anything for it; no functions now
+# Print: easy
+# Scan: easy
+# While
 
 # turn on/off printing
 switch = False
+output = []
+output2 = []
+# increment by 1 when identifier declared and placed in table
+memoryAddress = 5000
+instructionTableIndex = 1
+instructionTable = []
+symbolTable = []
+jumpStack = []
 output = []
 
 # prints to output file and increments tokens
@@ -17,6 +34,156 @@ def lexer_incrementor(tokens, lexemes, index):
         # print("NEW INDEX: ", index, lexemes[index], tokens[index])
     return index
 
+# ----------------------------------------------------------------
+
+def semantics(tokens, lexemes):
+    global memoryAddress, symbolTable, instructionTable
+    declaredIDs = set()
+    index = 0
+
+    while index < len(tokens):
+        # Handles undeclared idenitifiers by checking declaredIDs
+        if tokens[index] == "IDENTIFIER":
+            if lexemes[index] not in declaredIDs:
+                print(f"Error: {lexemes[index]} not declared")
+                index += 1
+
+        # Declarations start with integer, so when this keyword is detected, enter a
+        # while loop to look for identifiers and add them to the symbol table and declaredIDs
+        if lexemes[index] == "integer" or lexemes[index] == "boolean":
+            currentType = lexemes[index]
+            index += 1
+            while lexemes[index] != ";":
+                if tokens[index] == "SEPARATOR":
+                    index += 1
+                elif tokens[index] == "IDENTIFIER":
+                    if not any(entry[0] == lexemes[index] for entry in symbolTable):
+                        symbolTable.append([lexemes[index], memoryAddress, currentType])
+                        declaredIDs.add(lexemes[index])
+                        memoryAddress += 1
+                        index += 1
+                    else: # Handles identifiers that are already declared
+                        print(f"Error: {lexemes[index]} already declared")
+                        index += 1
+        else:
+            index += 1
+
+    rat24s(tokens, lexemes, index=0)
+
+    output2.append("Instruction Table")
+    for entry in instructionTable:
+        if switch:
+            print(entry)
+        output2.append(str(entry))
+
+    if switch:
+        print("")
+        print("Symbol Table")
+        print("Identifier\tMemory Address\tType")
+    output2.append("")
+    output2.append("Symbol Table")
+    output2.append("Identifier\tMemory Address\tType")
+    for k in symbolTable:
+        if switch:
+            print(f"{k[0]}\t\t{k[1]}\t\t{k[2]}")
+        output2.append(f"{k[0]}\t\t{k[1]}\t\t{k[2]}")
+
+    if switch:
+        print("")
+    output2.append("")
+    for k in range(0, len(tokens)):
+        if switch:
+            print(f"{tokens[k]}: {lexemes[k]}")
+        output2.append(f"{tokens[k]}: {lexemes[k]}")
+
+    outputFileName = input("Enter the desired output file name (with .txt at the end): ")
+
+    with open(outputFileName, 'w') as outputFile:
+        for line in output2:
+            outputFile.write(str(line) + "\n")
+    
+    print("Tokens and lexemes productions have succesfully been written to the output file.")
+                
+# done in semantics
+# def insert_symbol(tokens, lexemes, index):
+#     global symbol_table, memory_address
+#     if tokens[index] in symbol_table:
+#         print(f"Error: {lexemes[index]} already declared")
+#     else:
+#         symbol_table.append([lexemes[index], memory_address, tokens[index]])
+#         memory_address += 1
+
+def generateInstruction(operation, operand):
+    global instructionTableIndex, instructionTable
+    instructionTable.append([instructionTableIndex, operation, operand])
+    instructionTableIndex += 1
+
+def getAddress(id):
+    global symbolTable
+    for entry in symbolTable:
+        if entry[0] == id:
+            return entry[1]
+    return -1
+
+
+def backPatch(jumpAddr):
+    global instructionTable, jumpStack
+    # print("jumpstack")
+    # for entry in jumpStack:
+    #     print(entry)
+    addr = jumpStack.pop()
+    instructionTable[addr][2] = jumpAddr
+
+def type_match(tokens, lexemes, index):
+    for index in range(len(tokens)):
+        if lexemes[index] in ["!=", ">", "<", "<=", "=>", "+", "-", "*", "==", "/"]:
+            for entry in symbolTable:
+                if entry[0] == lexemes[index-1]:
+                    previousType = entry[2]
+                if entry[0] == lexemes[index+1]:
+                    nextType = entry[2]
+
+            if lexemes[index-1] in [entry[0] for entry in symbolTable] and lexemes[index+1] in [entry[0] for entry in symbolTable]:
+                if previousType != nextType:
+                    # print("previousType != nextType called")
+                    print(f"Error: {lexemes[index-1]} and {lexemes[index+1]} do not match: {previousType}, {nextType}")
+                    output2.append(f"Error: {lexemes[index-1]} and {lexemes[index+1]} do not match: {previousType}, {nextType}")
+                    continue
+                elif lexemes[index] in ["+", "-", "*", "/"] and previousType == "boolean" and nextType == "boolean":
+                    print(f"Error: arithmetic operations not allowed for booleans: {lexemes[index-1]} and {lexemes[index+1]}, {lexemes[index]}")
+                    output2.append(f"Error: arithmetic operations not allowed for boolean: {lexemes[index-1]} and {lexemes[index+1]}, {lexemes[index]}")
+                    continue
+            if lexemes[index-1] in [entry[0] for entry in symbolTable] and tokens[index+1] != "IDENTIFIER":
+                if previousType != tokens[index+1] and tokens[index+1] != "INTEGER":
+                    # print("previousType != tokens[index+1] called")
+                    print(f"Error: {lexemes[index-1]} and {lexemes[index+1]} do not match: {previousType}, {tokens[index+1]}")
+                    output2.append(f"Error: {lexemes[index-1]} and {lexemes[index+1]} do not match: {previousType}, {tokens[index+1]}")
+                    continue
+                elif lexemes[index] in ["+", "-", "*", "/"] and previousType == "boolean" and tokens[index+1] == "boolean":
+                    print(f"Error: arithmetic operations not allowed for booleans: {lexemes[index-1]} and {lexemes[index+1]}, {lexemes[index]}")
+                    output2.append(f"Error: arithmetic operations not allowed for booleans: {lexemes[index-1]} and {lexemes[index+1]}, {lexemes[index]}")
+                    continue
+            elif lexemes[index+1] in [entry[0] for entry in symbolTable] and tokens[index-1] != "IDENTIFIER":
+                if tokens[index-1] != nextType and tokens[index-1] != "INTEGER":
+                    # print("tokens[index-1] != nextType called")
+                    print(f"Error: {lexemes[index-1]} and {lexemes[index+1]} do not match: {tokens[index-1]}, {nextType}")
+                    output2.append(f"Error: {lexemes[index-1]} and {lexemes[index+1]} do not match: {tokens[index-1]}, {nextType}")
+                    continue
+                elif lexemes[index] in ["+", "-", "*", "/"] and lexemes[index-1] == "boolean" and nextType == "boolean":
+                    print(f"Error: arithmetic operations not allowed for booleans: {lexemes[index-1]} and {lexemes[index+1]}, {lexemes[index]}")
+                    output2.append(f"Error: arithmetic operations not allowed for booleans: {lexemes[index-1]} and {lexemes[index+1]}, {lexemes[index]}")
+                    continue
+            if lexemes[index] in ["+", "-", "*", "/"] and tokens[index-1] == "boolean" and tokens[index+1] == "boolean":
+                # print("boolean called")
+                print(f"Error: arithmetic operations not allowed for booleans: {lexemes[index-1]} and {lexemes[index+1]}, {lexemes[index]}")
+                output2.append(f"Error: arithmetic operations not allowed for booleans: {lexemes[index-1]} and {lexemes[index+1]}, {lexemes[index]}")
+                continue
+            # if tokens[index-1] != tokens[index+1]:
+            #     print("regular called")
+            #     print(f"Error: {lexemes[index-1]} and {lexemes[index+1]} do not match: {tokens[index-1]}, {tokens[index+1]}")
+            #     continue
+        index += 1
+# ----------------------------------------------------------------
 def rat24s(tokens, lexemes, index):
     # R1. <Rat24S>  ::=   $ <Opt Function Definitions>   $ <Opt Declaration List>  $ <Statement List>  $
     index = lexer_incrementor(tokens,lexemes,index)
@@ -32,6 +199,9 @@ def rat24s(tokens, lexemes, index):
             output.append("<Rat24S> -> $ <Opt Declaration List>")
             index = opt_declaration_list(tokens, lexemes, index)
             if lexemes[index] == '$' and index != len(lexemes):
+                # ----------------------------------------------------------------
+                type_match(tokens, lexemes, index)
+                # ----------------------------------------------------------------
                 index = lexer_incrementor(tokens, lexemes, index)
                 if switch:
                     print("<Rat24S> -> $ <Statement List>")
@@ -66,7 +236,7 @@ def rat24s(tokens, lexemes, index):
     #     for line in output:
     #         outputFile.write(str(line) + "\n")
 
-    print("Tokens and lexemes productions have succesfully been written to the output file.")
+    # print("Tokens and lexemes productions have succesfully been written to the output file.")
     return True
 
 def opt_function_definitions(tokens, lexemes, index):
@@ -419,6 +589,9 @@ def assign(tokens, lexemes, index):
     if tokens[index] == "IDENTIFIER":
         # show identifier
         # index = lexer_incrementor(tokens, lexemes, index)
+        # ----------------------------------------------------------------
+        savedID = lexemes[index]
+        # ----------------------------------------------------------------
         index = index + 1
         if switch:
             print("<Assign> -> <Identifier> = <Expression> ;")
@@ -426,6 +599,9 @@ def assign(tokens, lexemes, index):
         if lexemes[index] == "=":
             index = lexer_incrementor(tokens, lexemes, index)
             index = expression(tokens, lexemes, index)
+            # ----------------------------------------------------------------
+            generateInstruction("POPM", getAddress(savedID))
+            # ----------------------------------------------------------------
             if lexemes[index-1] != ";":
                 if switch:
                     print("Error: expected ;")
@@ -453,6 +629,9 @@ def If(tokens, lexemes, index):
             index = condition(tokens, lexemes, index)
             if lexemes[index-1] == ")":
                 index = statement(tokens, lexemes, index)
+                # ----------------------------------------------------------------
+                backPatch(instructionTableIndex)
+                # ----------------------------------------------------------------
                 index = if_prime(tokens, lexemes, index)
             else:
                 if switch:
@@ -472,11 +651,17 @@ def If(tokens, lexemes, index):
 def if_prime(tokens, lexemes, index):
     # R24. <If Prime> ::= endif     |     else <Statement> endif
     if lexemes[index] == "endif":
+        # ----------------------------------------------------------------
+        generateInstruction("LABEL", "nil")
+        # ----------------------------------------------------------------
         index = lexer_incrementor(tokens, lexemes, index)
         if switch:
             print("<If Prime> -> endif")
         output.append("<If Prime> -> endif")
     elif lexemes[index] == "else":
+        # ----------------------------------------------------------------
+        generateInstruction("LABEL", "nil")
+        # ----------------------------------------------------------------
         index = lexer_incrementor(tokens, lexemes, index)
         if switch:
             print("<If Prime> -> else <Statement> endif")
@@ -540,6 +725,7 @@ def Print(tokens, lexemes, index):
             index = expression(tokens, lexemes, index)
             if lexemes[index-1] == ")":
                 if lexemes[index] == ";":
+                    generateInstruction("SOUT", "")
                     index = lexer_incrementor(tokens, lexemes, index)
                 else:
                     if switch:
@@ -566,9 +752,19 @@ def scan(tokens, lexemes, index):
         # index = lexer_incrementor(tokens, lexemes, index)
         if lexemes[index] == "(":
             index = lexer_incrementor(tokens, lexemes, index)
+            # ----------------------------------------------------------------
+            generateInstruction("SIN", "")
+            # ----------------------------------------------------------------
             if switch:
                 print("<Scan> -> scan ( <IDs> );")
             output.append("<Scan> -> scan ( <IDs> );")
+            # ----------------------------------------------------------------
+            index2 = index
+            while (lexemes[index2] != ")"):
+                if tokens[index2] == "IDENTIFIER":
+                    generateInstruction("POPM", getAddress(lexemes[index]))
+                index2 = index2 + 1
+            # ----------------------------------------------------------------
             index = ids(tokens, lexemes, index)
             if lexemes[index] == ")":
                 index = lexer_incrementor(tokens, lexemes, index)
@@ -594,7 +790,15 @@ def scan(tokens, lexemes, index):
 
 def While(tokens, lexemes, index):
     # R29. <While> ::=  while ( <Condition>  )  <Statement>  endwhile
+    # ----------------------------------------------------------------
+    global instructionTableIndex
+    instructAddr = instructionTableIndex
+    # ----------------------------------------------------------------
+    
     if lexemes[index] == "while":
+        # ----------------------------------------------------------------
+        generateInstruction("LABEL", "nil")
+        # ----------------------------------------------------------------
         index = index + 1
         # index = lexer_incrementor(tokens, lexemes, index)
         if lexemes[index] == "(":
@@ -605,6 +809,10 @@ def While(tokens, lexemes, index):
             index = condition(tokens, lexemes, index)
             if lexemes[index-1] == ")":
                 index = statement(tokens, lexemes, index)
+                # ----------------------------------------------------------------
+                generateInstruction("JUMP", instructAddr)
+                backPatch(instructionTableIndex)
+                # ----------------------------------------------------------------
                 if lexemes[index] == "endwhile":
                     index = lexer_incrementor(tokens, lexemes, index)
                 else:
@@ -632,7 +840,37 @@ def condition(tokens, lexemes, index):
     output.append("<Condition> -> <Expression> <Relop> <Expression>")
     index = expression(tokens, lexemes, index)
     index = relop(tokens, lexemes, index)
+    # ----------------------------------------------------------------
+    op = lexemes[index-1]
+    # ----------------------------------------------------------------
     index = expression(tokens, lexemes, index)
+    # ----------------------------------------------------------------
+    if op == "<":
+        generateInstruction("LES", "nil")
+        jumpStack.append(instructionTableIndex)
+        generateInstruction("JUMP0", "nil")
+    elif op == ">":
+        generateInstruction("GRT", "nil")
+        jumpStack.append(instructionTableIndex)
+        generateInstruction("JUMP0", "nil")
+    elif op == "==":
+        generateInstruction("EQU", "nil")
+        jumpStack.append(instructionTableIndex)
+        generateInstruction("JUMP0", "nil")
+    elif op == "!=":
+        generateInstruction("NEQ", "nil")
+        jumpStack.append(instructionTableIndex)
+        generateInstruction("JUMP0", "nil")
+    elif op == "<=":
+        generateInstruction("LEQ", "nil")
+        jumpStack.append(instructionTableIndex)
+        generateInstruction("JUMP0", "nil")
+    elif op == "=>":
+        generateInstruction("GEQ", "nil")
+        jumpStack.append(instructionTableIndex)
+        generateInstruction("JUMP0", "nil")
+    # ----------------------------------------------------------------
+
     return index
 
 def relop(tokens, lexemes, index):
@@ -663,11 +901,21 @@ def expression_prime(tokens, lexemes, index):
     # R33. <Expression Prime> ::= + <Term><Expression Prime> | - <Term><Expression Prime> | e
     # term prime causes index-1
     if lexemes[index-1] == "+" or lexemes[index-1] == "-":
+        # ----------------------------------------------------------------
+        operator = lexemes[index-1]
+        # ----------------------------------------------------------------
         if switch:
             print("<Expression Prime> -> ", lexemes[index-1], " <Term><Expression Prime>")
         output.append("<Expression Prime> -> " + lexemes[index-1] + " <Term><Expression Prime>")
+
         index = lexer_incrementor(tokens, lexemes, index)
         index = term(tokens, lexemes, index)
+        # ----------------------------------------------------------------
+        if operator == "+":
+            generateInstruction("A", "nil")
+        else:
+            generateInstruction("S", "nil")
+        # ----------------------------------------------------------------
         index = expression_prime(tokens, lexemes, index)
     else:
         if switch:
@@ -687,6 +935,9 @@ def term(tokens, lexemes, index):
 def term_prime(tokens, lexemes, index):
     # R35. <Term Prime> ::= * <Factor><Term Prime> | / <Factor><Term Prime> | e
     if lexemes[index] == "*" or lexemes[index] == "/":
+        # ----------------------------------------------------------------
+        operator = lexemes[index]
+        # ----------------------------------------------------------------
         index = lexer_incrementor(tokens, lexemes, index)
         if switch:
             print("<Term Prime> -> ", lexemes[index-1], " <Factor><Term Prime>")
@@ -694,6 +945,12 @@ def term_prime(tokens, lexemes, index):
         # # added this because of test case 1 for multiplication
         # index = lexer_incrementor(tokens, lexemes, index)
         index = factor(tokens, lexemes, index)
+        # ----------------------------------------------------------------
+        if operator == "*":
+            generateInstruction("M", "nil")
+        else:
+            generateInstruction("D", "nil")
+        # ----------------------------------------------------------------
         index = term_prime(tokens, lexemes, index)
     else:
         index = lexer_incrementor(tokens, lexemes, index)
@@ -724,14 +981,28 @@ def primary(tokens, lexemes, index):
     if tokens[index-1] == "IDENTIFIER" or tokens[index] == "IDENTIFIER":
         # for regulars
         if tokens[index] == "IDENTIFIER":
+            # ----------------------------------------------------------------
+            generateInstruction("PUSHM", getAddress(lexemes[index]))
+            # ----------------------------------------------------------------
             index = lexer_incrementor(tokens, lexemes, index)
+        # ----------------------------------------------------------------
+        else:
+            generateInstruction("PUSHM", getAddress(lexemes[index-1]))
+        # ----------------------------------------------------------------
         if switch:
             print("<Primary> -> <Identifier> <Primary Prime>")
         output.append("<Primary> -> <Identifier> <Primary Prime>")
         index = primary_prime(tokens, lexemes, index)
     elif tokens[index-1] == "INTEGER" or tokens[index] == "INTEGER":
         if tokens[index] == "INTEGER":
+            # ----------------------------------------------------------------
+            generateInstruction("PUSHI", lexemes[index])
+            # ----------------------------------------------------------------
             index = lexer_incrementor(tokens, lexemes, index)
+        # ----------------------------------------------------------------
+        else:
+            generateInstruction("PUSHI", lexemes[index-1])
+        # ----------------------------------------------------------------
         if switch:
             print("<Primary> -> <Integer>")
         output.append("<Primary> -> <Integer>")
@@ -743,11 +1014,23 @@ def primary(tokens, lexemes, index):
         output.append("<Primary> -> <Real>")
     elif lexemes[index-1] in ["true","false"] or lexemes[index] in ["true", "false"]:
         if lexemes[index] in ["true", "false"]:
+            # ----------------------------------------------------------------
+            if lexemes[index] == "true":
+                generateInstruction("PUSHI", "1")
+            elif lexemes[index] == "false":
+                generateInstruction("PUSHI", "0")
+            # ----------------------------------------------------------------
             index = lexer_incrementor(tokens, lexemes, index)
             if switch:
                 print("<Primary> -> ", lexemes[index-1])
             output.append("<Primary> -> " + lexemes[index-1])
         else:
+            # ----------------------------------------------------------------
+            if lexemes[index-1] == "true":
+                generateInstruction("PUSHI", "1")
+            elif lexemes[index-1] == "false":
+                generateInstruction("PUSHI", "0")
+            # ----------------------------------------------------------------
             if switch:
                 print("<Primary> -> ", lexemes[index-1])
             output.append("<Primary> -> " + lexemes[index-1])

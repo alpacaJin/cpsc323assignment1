@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
+
 import sys
 from lexer import int_realDFSM, identifierDFSM
 from syntaxanalyzer import *
-from semantics import *
+# from semantics import *
 
 separators = ['$', '(', ')', '{', '}', ';', ',']
 operators = ['==', '!=', '>', '<', '<=', '=>', '+', '-', '*', '/', '=']
@@ -180,9 +182,8 @@ def main():
             tokens.append(entry[0])
             lexemes.append(entry[1])
         
-        syntaxAnalysis = rat24s(tokens, lexemes, index)
-        if syntaxAnalysis:
-            semantics(tokens, lexemes)
+        # syntaxAnalysis = rat24s(tokens, lexemes, index)
+        semantics(tokens, lexemes)
 
 if __name__ == "__main__":
     main()
