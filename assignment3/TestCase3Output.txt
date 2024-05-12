@@ -1,0 +1,151 @@
+Instruction Table
+[1, 'PUSHI', '7']
+[2, 'POPM', 5000]
+[3, 'PUSHI', '0']
+[4, 'POPM', 5002]
+[5, 'PUSHI', '0']
+[6, 'POPM', 5003]
+[7, 'LABEL', 'nil']
+[8, 'PUSHM', 5002]
+[9, 'PUSHI', '3']
+[10, 'LES', 'nil']
+[11, 'JUMP0', 'nil']
+[12, 'SIN', 43]
+[13, 'POPM', 5001]
+[14, 'PUSHM', 5001]
+[15, 'SOUT', '']
+[16, 'PUSHM', 5003]
+[17, 'PUSHI', '1']
+[18, 'A', 'nil']
+[19, 'POPM', 5003]
+[20, 'PUSHM', 5001]
+[21, 'PUSHM', 5000]
+[22, 'EQU', 'nil']
+[23, 'JUMP0', 'nil']
+[24, 'PUSHM', 30]
+[25, 'PUSHI', '1']
+[26, 'A', 'nil']
+[27, 'POPM', 5002]
+[28, 'PUSHM', 5000]
+[29, 'SOUT', '']
+[30, 'LABEL', 'nil']
+[31, 'PUSHM', 5001]
+[32, 'PUSHM', 5000]
+[33, 'LES', 'nil']
+[34, 'JUMP0', 'nil']
+[35, 'PUSHI', 37]
+[36, 'SOUT', '']
+[37, 'LABEL', 'nil']
+[38, 'PUSHI', '1']
+[39, 'SOUT', '']
+[40, 'PUSHM', 5003]
+[41, 'SOUT', '']
+[42, 'JUMP', 7]
+
+Symbol Table
+Identifier	Memory Address	Type
+target		5000		integer
+guess		5001		integer
+correctGuesses		5002		integer
+attempts		5003		integer
+
+SEPARATOR: $
+SEPARATOR: $
+KEYWORD: integer
+IDENTIFIER: target
+SEPARATOR: ,
+IDENTIFIER: guess
+SEPARATOR: ,
+IDENTIFIER: correctGuesses
+SEPARATOR: ,
+IDENTIFIER: attempts
+SEPARATOR: ;
+SEPARATOR: $
+IDENTIFIER: target
+OPERATOR: =
+INTEGER: 7
+SEPARATOR: ;
+IDENTIFIER: correctGuesses
+OPERATOR: =
+INTEGER: 0
+SEPARATOR: ;
+IDENTIFIER: attempts
+OPERATOR: =
+INTEGER: 0
+SEPARATOR: ;
+KEYWORD: while
+SEPARATOR: (
+IDENTIFIER: correctGuesses
+OPERATOR: <
+INTEGER: 3
+SEPARATOR: )
+SEPARATOR: {
+KEYWORD: scan
+SEPARATOR: (
+IDENTIFIER: guess
+SEPARATOR: )
+SEPARATOR: ;
+KEYWORD: print
+SEPARATOR: (
+IDENTIFIER: guess
+SEPARATOR: )
+SEPARATOR: ;
+IDENTIFIER: attempts
+OPERATOR: =
+IDENTIFIER: attempts
+OPERATOR: +
+INTEGER: 1
+SEPARATOR: ;
+KEYWORD: if
+SEPARATOR: (
+IDENTIFIER: guess
+OPERATOR: ==
+IDENTIFIER: target
+SEPARATOR: )
+SEPARATOR: {
+IDENTIFIER: correctGuesses
+OPERATOR: =
+IDENTIFIER: correctGuesses
+OPERATOR: +
+INTEGER: 1
+SEPARATOR: ;
+KEYWORD: print
+SEPARATOR: (
+IDENTIFIER: target
+SEPARATOR: )
+SEPARATOR: ;
+SEPARATOR: }
+KEYWORD: else
+SEPARATOR: {
+KEYWORD: if
+SEPARATOR: (
+IDENTIFIER: guess
+OPERATOR: <
+IDENTIFIER: target
+SEPARATOR: )
+SEPARATOR: {
+KEYWORD: print
+SEPARATOR: (
+INTEGER: 0
+SEPARATOR: )
+SEPARATOR: ;
+SEPARATOR: }
+KEYWORD: else
+SEPARATOR: {
+KEYWORD: print
+SEPARATOR: (
+INTEGER: 1
+SEPARATOR: )
+SEPARATOR: ;
+SEPARATOR: }
+KEYWORD: endif
+SEPARATOR: }
+KEYWORD: endif
+KEYWORD: print
+SEPARATOR: (
+IDENTIFIER: attempts
+SEPARATOR: )
+SEPARATOR: ;
+SEPARATOR: }
+KEYWORD: endwhile
+SEPARATOR: $

@@ -1,0 +1,153 @@
+Error: i and true do not match: integer, KEYWORD
+Error: i and rgeal do not match: integer, boolean
+Error: rgeal and max do not match: boolean, integer
+Instruction Table
+[1, 'PUSHI', '5']
+[2, 'PUSHI', '32']
+[3, 'M', 'nil']
+[4, 'PUSHI', '9']
+[5, 'D', 'nil']
+[6, 'POPM', 5003]
+[7, 'PUSHM', 5001]
+[8, 'PUSHM', 5002]
+[9, 'PUSHM', 5003]
+[10, 'M', 'nil']
+[11, 'A', 'nil']
+[12, 'POPM', 5000]
+[13, 'PUSHI', '1']
+[14, 'POPM', 5006]
+[15, 'PUSHI', '3']
+[16, 'POPM', 5007]
+[17, 'LABEL', 'nil']
+[18, 'PUSHM', 5006]
+[19, 'PUSHM', 5007]
+[20, 'LES', 'nil']
+[21, 'JUMP0', 'nil']
+[22, 'PUSHM', 27]
+[23, 'PUSHI', '1']
+[24, 'A', 'nil']
+[25, 'POPM', 5006]
+[26, 'JUMP', 17]
+[27, 'PUSHM', 5001]
+[28, 'PUSHM', 5002]
+[29, 'LES', 'nil']
+[30, 'JUMP0', 'nil']
+[31, 'PUSHM', 33]
+[32, 'POPM', 5001]
+[33, 'LABEL', 'nil']
+[34, 'PUSHI', '1']
+[35, 'POPM', 5006]
+[36, 'PUSHI', '4']
+[37, 'POPM', 5008]
+[38, 'PUSHM', 5008]
+[39, 'PUSHM', 5007]
+[40, 'A', 'nil']
+[41, 'POPM', 5006]
+
+Symbol Table
+Identifier	Memory Address	Type
+x		5000		integer
+a		5001		integer
+b		5002		integer
+c		5003		integer
+fahr		5004		integer
+y		5005		boolean
+i		5006		integer
+max		5007		integer
+rgeal		5008		boolean
+boo		5009		boolean
+
+SEPARATOR: $
+SEPARATOR: $
+KEYWORD: integer
+IDENTIFIER: x
+SEPARATOR: ,
+IDENTIFIER: a
+SEPARATOR: ,
+IDENTIFIER: b
+SEPARATOR: ,
+IDENTIFIER: c
+SEPARATOR: ,
+IDENTIFIER: fahr
+SEPARATOR: ;
+KEYWORD: boolean
+IDENTIFIER: y
+SEPARATOR: ;
+KEYWORD: integer
+IDENTIFIER: i
+SEPARATOR: ,
+IDENTIFIER: max
+SEPARATOR: ;
+KEYWORD: boolean
+IDENTIFIER: rgeal
+SEPARATOR: ,
+IDENTIFIER: boo
+SEPARATOR: ;
+SEPARATOR: $
+IDENTIFIER: c
+OPERATOR: =
+INTEGER: 5
+OPERATOR: *
+SEPARATOR: (
+IDENTIFIER: fahr
+OPERATOR: -
+INTEGER: 32
+SEPARATOR: )
+OPERATOR: /
+INTEGER: 9
+SEPARATOR: ;
+IDENTIFIER: x
+OPERATOR: =
+IDENTIFIER: a
+OPERATOR: +
+IDENTIFIER: b
+OPERATOR: *
+IDENTIFIER: c
+SEPARATOR: ;
+IDENTIFIER: i
+OPERATOR: =
+INTEGER: 1
+SEPARATOR: ;
+IDENTIFIER: max
+OPERATOR: =
+INTEGER: 3
+SEPARATOR: ;
+KEYWORD: while
+SEPARATOR: (
+IDENTIFIER: i
+OPERATOR: <
+IDENTIFIER: max
+SEPARATOR: )
+IDENTIFIER: i
+OPERATOR: =
+IDENTIFIER: i
+OPERATOR: +
+INTEGER: 1
+SEPARATOR: ;
+KEYWORD: endwhile
+KEYWORD: if
+SEPARATOR: (
+IDENTIFIER: a
+OPERATOR: <
+IDENTIFIER: b
+SEPARATOR: )
+IDENTIFIER: a
+OPERATOR: =
+IDENTIFIER: c
+SEPARATOR: ;
+KEYWORD: endif
+IDENTIFIER: i
+OPERATOR: =
+KEYWORD: true
+SEPARATOR: ;
+IDENTIFIER: rgeal
+OPERATOR: =
+INTEGER: 4
+SEPARATOR: ;
+IDENTIFIER: i
+OPERATOR: =
+IDENTIFIER: rgeal
+OPERATOR: +
+IDENTIFIER: max
+SEPARATOR: ;
+SEPARATOR: $

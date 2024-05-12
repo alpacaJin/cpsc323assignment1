@@ -46,6 +46,7 @@ def semantics(tokens, lexemes):
         if tokens[index] == "IDENTIFIER":
             if lexemes[index] not in declaredIDs:
                 print(f"Error: {lexemes[index]} not declared")
+                output2.append(f"Error: {lexemes[index]} not declared")
                 index += 1
 
         # Declarations start with integer, so when this keyword is detected, enter a
@@ -64,6 +65,7 @@ def semantics(tokens, lexemes):
                         index += 1
                     else: # Handles identifiers that are already declared
                         print(f"Error: {lexemes[index]} already declared")
+                        output2.append(f"Error: {lexemes[index]} already declared")
                         index += 1
         else:
             index += 1
@@ -136,7 +138,7 @@ def backPatch(jumpAddr):
 
 def type_match(tokens, lexemes, index):
     for index in range(len(tokens)):
-        if lexemes[index] in ["!=", ">", "<", "<=", "=>", "+", "-", "*", "==", "/"]:
+        if lexemes[index] in ["!=", ">", "<", "<=", "=>", "+", "-", "*", "==", "/", "="]:
             for entry in symbolTable:
                 if entry[0] == lexemes[index-1]:
                     previousType = entry[2]
