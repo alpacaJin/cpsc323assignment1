@@ -12,11 +12,11 @@ $
     while (correctGuesses < 3) {
         scan(guess);
         print(guess);
-        attempts++;
+        attempts = attempts + 1;
 
         [* Check if guess is correct *]
         if (guess == target) {
-            correctGuesses++;
+            correctGuesses = correctGuesses + 1;
             print(target);
         } else {
             [* Provide hint based on higher or lower *]
@@ -25,7 +25,9 @@ $
             } else {
                 print(1);
             }
+            endif
         }
+        endif
         print(attempts);
     }
     endwhile
