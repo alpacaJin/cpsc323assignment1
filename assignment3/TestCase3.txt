@@ -1,0 +1,27 @@
+$ [* This function takes in two integers and calculates the difference between them using a for loop. It does not use subtraction directly *]
+integer target = 7;
+integer guess;
+integer correctGuesses = 0;
+integer attempts = 0;
+
+while (correctGuesses < 3) {
+    scan(guess);
+    print(guess);
+    attempts++;
+
+    [* Check if guess is correct*]
+    if (guess == target) {
+        correctGuesses++;
+        print(guess, target);
+    } else {
+        [* Provide hint based on higher or lower *]
+        if (guess < target) {
+            print(0);
+        } else {
+            print(1);
+        }
+    }
+    print(attempts);
+}
+endwhile
+$
