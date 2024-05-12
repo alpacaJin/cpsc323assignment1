@@ -1,27 +1,32 @@
-$ [* This function takes in two integers and calculates the difference between them using a for loop. It does not use subtraction directly *]
-integer target = 7;
-integer guess;
-integer correctGuesses = 0;
-integer attempts = 0;
 
-while (correctGuesses < 3) {
-    scan(guess);
-    print(guess);
-    attempts++;
+[* This code checks correct guesses and tracks attempts *]
+$
+    [* NO function definitions *]
+$
+    integer target, guess, correctGuesses, attempts;
+$
+    target = 7;
+    correctGuesses = 0;
+    attempts = 0;
+    
+    while (correctGuesses < 3) {
+        scan(guess);
+        print(guess);
+        attempts++;
 
-    [* Check if guess is correct*]
-    if (guess == target) {
-        correctGuesses++;
-        print(guess, target);
-    } else {
-        [* Provide hint based on higher or lower *]
-        if (guess < target) {
-            print(0);
+        [* Check if guess is correct *]
+        if (guess == target) {
+            correctGuesses++;
+            print(target);
         } else {
-            print(1);
+            [* Provide hint based on higher or lower *]
+            if (guess < target) {
+                print(0);
+            } else {
+                print(1);
+            }
         }
+        print(attempts);
     }
-    print(attempts);
-}
-endwhile
+    endwhile
 $
