@@ -4,6 +4,8 @@ $
     [* NO function definitions *]
 $
     integer target, guess, correctGuesses, attempts;
+
+    boolean success;
 $
     target = 7;
     correctGuesses = 0;
@@ -31,4 +33,9 @@ $
         print(attempts);
     }
     endwhile
+
+    [* error testing *]
+    target = true;
+    success = 4;
+    i = success + max;
 $

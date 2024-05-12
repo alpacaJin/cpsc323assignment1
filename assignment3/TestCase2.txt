@@ -18,9 +18,4 @@ $
 
 [* third example Assignment 3 Partial Solutions.docx *]
     if (a < b)  a =  c; endif
-
-[* error testing *]
-    i = true;
-    rgeal = 4;
-    i = rgeal + max;
 $

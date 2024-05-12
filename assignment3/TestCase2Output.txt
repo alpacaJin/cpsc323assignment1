@@ -1,6 +1,3 @@
-Error: i and true do not match: integer, KEYWORD
-Error: i and rgeal do not match: integer, boolean
-Error: rgeal and max do not match: boolean, integer
 Instruction Table
 [1, 'PUSHI', '5']
 [2, 'PUSHI', '32']
@@ -35,14 +32,6 @@ Instruction Table
 [31, 'PUSHM', 33]
 [32, 'POPM', 5001]
 [33, 'LABEL', 'nil']
-[34, 'PUSHI', '1']
-[35, 'POPM', 5006]
-[36, 'PUSHI', '4']
-[37, 'POPM', 5008]
-[38, 'PUSHM', 5008]
-[39, 'PUSHM', 5007]
-[40, 'A', 'nil']
-[41, 'POPM', 5006]
 
 Symbol Table
 Identifier	Memory Address	Type
@@ -136,18 +125,4 @@ OPERATOR: =
 IDENTIFIER: c
 SEPARATOR: ;
 KEYWORD: endif
-IDENTIFIER: i
-OPERATOR: =
-KEYWORD: true
-SEPARATOR: ;
-IDENTIFIER: rgeal
-OPERATOR: =
-INTEGER: 4
-SEPARATOR: ;
-IDENTIFIER: i
-OPERATOR: =
-IDENTIFIER: rgeal
-OPERATOR: +
-IDENTIFIER: max
-SEPARATOR: ;
 SEPARATOR: $

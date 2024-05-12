@@ -1,3 +1,6 @@
+Error: i not declared
+Error: max not declared
+Error: target and true do not match: integer, KEYWORD
 Instruction Table
 [1, 'PUSHI', '7']
 [2, 'POPM', 5000]
@@ -41,6 +44,14 @@ Instruction Table
 [40, 'PUSHM', 5003]
 [41, 'SOUT', '']
 [42, 'JUMP', 7]
+[43, 'PUSHI', '1']
+[44, 'POPM', 5000]
+[45, 'PUSHI', '4']
+[46, 'POPM', 5004]
+[47, 'PUSHM', 5004]
+[48, 'PUSHM', -1]
+[49, 'A', 'nil']
+[50, 'POPM', -1]
 
 Symbol Table
 Identifier	Memory Address	Type
@@ -48,6 +59,7 @@ target		5000		integer
 guess		5001		integer
 correctGuesses		5002		integer
 attempts		5003		integer
+success		5004		boolean
 
 SEPARATOR: $
 SEPARATOR: $
@@ -59,6 +71,9 @@ SEPARATOR: ,
 IDENTIFIER: correctGuesses
 SEPARATOR: ,
 IDENTIFIER: attempts
+SEPARATOR: ;
+KEYWORD: boolean
+IDENTIFIER: success
 SEPARATOR: ;
 SEPARATOR: $
 IDENTIFIER: target
@@ -148,4 +163,18 @@ SEPARATOR: )
 SEPARATOR: ;
 SEPARATOR: }
 KEYWORD: endwhile
+IDENTIFIER: target
+OPERATOR: =
+KEYWORD: true
+SEPARATOR: ;
+IDENTIFIER: success
+OPERATOR: =
+INTEGER: 4
+SEPARATOR: ;
+IDENTIFIER: i
+OPERATOR: =
+IDENTIFIER: success
+OPERATOR: +
+IDENTIFIER: max
+SEPARATOR: ;
 SEPARATOR: $
